@@ -32,19 +32,17 @@ class Nex2Tek_QA {
             'show_in_menu' => true,
             'rewrite' => ['slug' => 'cau-hoi'],
             'menu_icon' => 'dashicons-editor-help',
-            'pll' => true,
-            'supports' => ['title', 'editor', 'custom-fields', 'comments'],
+            'comment_status' => 'open',
+            'supports' => ['title', 'editor', 'custom-fields', 'comments','thumbnail'],
         ]);
 
         // Bác sĩ
         register_post_type('doctor', [
             'label' => __('Bác sĩ', 'nex2tek-qa'),
             'public' => true,
-            'supports' => ['title', 'editor', 'thumbnail'],
             'show_in_rest' => true,
             'menu_icon' => 'dashicons-groups',
-            'pll' => true,
-            'supports' => ['title', 'editor', 'custom-fields'],
+            'supports' => ['title', 'editor', 'custom-fields','thumbnail'],
         ]);
 
         // Taxonomy: Chuyên mục

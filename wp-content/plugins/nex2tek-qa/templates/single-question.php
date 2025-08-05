@@ -14,6 +14,11 @@
             <div><?php echo wpautop($answer); ?></div>
         </div>
     <?php endif; ?>
+    <?php
+        if (comments_open() || get_comments_number()) {
+            comments_template();
+        }
+    ?>
 </main>
 
 <?php get_footer(); ?>
