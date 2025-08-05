@@ -16,7 +16,7 @@ class Nex2Tek_QA {
         add_shortcode('nex2tek_qa_list', array($this, 'qa_list_shortcode'));
         add_shortcode('nex2tek_qa_form', array($this, 'qa_form_shortcode'));
         add_filter('template_include', array($this, 'override_templates'));
-
+        add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
     }
 
     public function register_post_types() {
@@ -29,6 +29,8 @@ class Nex2Tek_QA {
             'show_in_rest' => true,
             'rewrite' => ['slug' => 'cau-hoi'],
             'menu_icon' => 'dashicons-editor-help',
+            'pll' => true,
+            'supports' => ['title', 'editor', 'custom-fields', 'comments'],
         ]);
 
         // Bác sĩ
@@ -38,6 +40,8 @@ class Nex2Tek_QA {
             'supports' => ['title', 'editor', 'thumbnail'],
             'show_in_rest' => true,
             'menu_icon' => 'dashicons-groups',
+            'pll' => true,
+            'supports' => ['title', 'editor', 'custom-fields'],
         ]);
 
         // Taxonomy: Chuyên mục
@@ -124,32 +128,56 @@ class Nex2Tek_QA {
 
     public function qa_form_shortcode() {
         ob_start();
-
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
-            $question_content = sanitize_text_field($_POST['qa_question']);
+            $question_content = sanitize_textarea_field($_POST['qa_question']);
+            $name    = sanitize_text_field($_POST['qa_name']);
+            $phone   = sanitize_text_field($_POST['qa_phone']);
+            $email   = sanitize_email($_POST['qa_email']);
+    
+            $meta_data = [
+                'name'  => $name,
+                'phone' => $phone,
+                'email' => $email,
+            ];
+    
             $post_id = wp_insert_post([
-                'post_type' => 'question',
-                'post_title' => wp_trim_words($question_content, 10),
+                'post_type'    => 'question',
+                'post_title'   => wp_trim_words($question_content, 10),
                 'post_content' => $question_content,
-                'post_status' => 'pending',
+                'post_status'  => 'pending',
+                'meta_input'   => $meta_data,
             ]);
+    
             if ($post_id) {
-                echo '<p>' . __('Câu hỏi của bạn đã được gửi thành công.', 'nex2tek-qa') . '</p>';
+                echo '<div class="alert alert-success">' . __('Câu hỏi của bạn đã được gửi thành công.', 'nex2tek-qa') . '</div>';
             }
         }
-
         ?>
-        <form method="post">
-            <p>
-                <label><?php _e('Câu hỏi của bạn', 'nex2tek-qa'); ?></label><br>
-                <textarea name="qa_question" required rows="5" cols="50"></textarea>
-            </p>
-            <p><button type="submit"><?php _e('Gửi câu hỏi', 'nex2tek-qa'); ?></button></p>
+    
+        <form method="post" class="qa-form mt-4">
+            <div class="mb-3">
+                <label for="qa_question" class="form-label"><?php _e('Nội dung câu hỏi', 'nex2tek-qa'); ?> *</label>
+                <textarea name="qa_question" id="qa_question" class="form-control" rows="5" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="qa_name" class="form-label"><?php _e('Tên của bạn', 'nex2tek-qa'); ?></label>
+                <input type="text" name="qa_name" id="qa_name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="qa_phone" class="form-label"><?php _e('Điện thoại', 'nex2tek-qa'); ?></label>
+                <input type="tel" name="qa_phone" id="qa_phone" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="qa_email" class="form-label"><?php _e('Email', 'nex2tek-qa'); ?></label>
+                <input type="email" name="qa_email" id="qa_email" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary"><?php _e('Gửi câu hỏi', 'nex2tek-qa'); ?></button>
         </form>
+    
         <?php
-
         return ob_get_clean();
-    }
+    }    
 
     public function override_templates($template) {
         // Giao diện chi tiết câu hỏi
@@ -170,6 +198,10 @@ class Nex2Tek_QA {
             if (file_exists($custom_template)) return $custom_template;
         }
 
+        if(is_page('gui-cau-hoi')) {
+            $custom_template = plugin_dir_path(__FILE__) . 'templates/page-question.php';
+            if (file_exists($custom_template)) return $custom_template;
+        }
         // Giao diện category của câu hỏi
         if (is_tax('question_category')) {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/taxonomy-question_category.php';
@@ -177,6 +209,17 @@ class Nex2Tek_QA {
         }
 
         return $template;
+    }
+
+    public function enqueue_assets() {
+        // Styles
+        wp_enqueue_style('bootstrap-icon', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css', [], '1.13.1');
+        wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', [], '5.0.0');
+        wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], '1.0.0');
+
+        // Scripts
+        wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', ['jquery'], '5.0.0', true);
+        wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/scripts.js', ['jquery'], '1.0.0', true);
     }
    
 }
@@ -187,23 +230,34 @@ new Nex2Tek_QA();
 // Hook tạo page khi kích hoạt
 register_activation_hook(__FILE__, 'nex2tek_qa_create_pages');
 function nex2tek_qa_create_pages() {
-    if (!get_page_by_path('cau-hoi')) {
-        wp_insert_post([
-            'post_title'   => 'Câu hỏi',
-            'post_name'    => 'cau-hoi',
-            'post_content' => '[nex2tek_qa_list]',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-        ]);
-    }
+    $default_lang = function_exists('pll_default_language') ? pll_default_language() : 'vi';
 
     if (!get_page_by_path('gui-cau-hoi')) {
-        wp_insert_post([
+        $post_id = wp_insert_post([
             'post_title'   => 'Gửi câu hỏi',
             'post_name'    => 'gui-cau-hoi',
             'post_content' => '[nex2tek_qa_form]',
             'post_status'  => 'publish',
             'post_type'    => 'page',
         ]);
+
+        if (function_exists('pll_set_post_language')) {
+            pll_set_post_language($post_id, $default_lang);
+        }
     }
 }
+
+// Cho phép Polylang hỗ trợ CPT 'question', 'doctor'
+add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
+    $post_types['question'] = 'question';
+    $post_types['doctor'] = 'doctor';
+
+    return $post_types;
+}, 10, 2);
+
+// Cho phép Polylang hỗ trợ taxonomy 'question_category'
+add_filter('pll_get_taxonomies', function($taxonomies, $is_translatable) {
+    $taxonomies['question_category'] = true;
+    
+    return $taxonomies;
+}, 10, 2);
