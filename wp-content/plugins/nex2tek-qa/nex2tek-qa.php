@@ -17,6 +17,8 @@ class Nex2Tek_QA {
         add_shortcode('nex2tek_qa_form', array($this, 'qa_form_shortcode'));
         add_filter('template_include', array($this, 'override_templates'));
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
+        add_shortcode('nex2tek_qa_question_category', array($this, 'qa_question_category_shortcode'));
+        add_shortcode('nex2tek_qa_question_statistic', array($this, 'qa_question_statistic_shortcode'));
     }
 
     public function register_post_types() {
@@ -24,9 +26,10 @@ class Nex2Tek_QA {
         register_post_type('question', [
             'label' => __('Câu hỏi', 'nex2tek-qa'),
             'public' => true,
-            'supports' => ['title', 'editor'],
             'has_archive' => true,
             'show_in_rest' => true,
+            'show_ui' => true,
+            'show_in_menu' => true,
             'rewrite' => ['slug' => 'cau-hoi'],
             'menu_icon' => 'dashicons-editor-help',
             'pll' => true,
@@ -150,30 +153,121 @@ class Nex2Tek_QA {
             ]);
     
             if ($post_id) {
-                echo '<div class="alert alert-success">' . __('Câu hỏi của bạn đã được gửi thành công.', 'nex2tek-qa') . '</div>';
+                echo '<div class="alert alert-success">Câu hỏi của bạn đã được gửi thành công.</div>';
             }
         }
         ?>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-2">
+                    <?php echo do_shortcode('[nex2tek_qa_question_category]'); ?>
+                </div>
+                <div class="col-lg-7">
+                    <div class="qa-form-wrapper p-4 rounded-4 shadow-sm bg-white">
+                        <h3 class="fw-bold mb-2">ĐẶT CÂU HỎI</h3>
+                        <p class="text-muted mb-4">Quý khách vui lòng điền đầy đủ thông bên dưới</p>
+                        <form method="post" class="qa-form">
+                            <div class="mb-3">
+                                <label for="qa_question" class="form-label fw-semibold">
+                                    Nội dung câu hỏi <span class="text-danger">*</span>
+                                </label>
+                                <textarea name="qa_question" id="qa_question" class="form-control px-3 py-2" rows="4" required placeholder="Nhập nội dung câu hỏi..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" name="qa_name" id="qa_name" class="form-control px-3 py-2" placeholder="Tên của bạn" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="tel" name="qa_phone" id="qa_phone" class="form-control px-3 py-2" placeholder="Điện thoại" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" name="qa_email" id="qa_email" class="form-control px-3 py-2" placeholder="Email" required>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn text-white px-4 py-2 fw-bold">
+                                    ĐẶT CÂU HỎI
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <?php echo do_shortcode('[nex2tek_qa_question_statistic]'); ?>
+                </div>
+            </div>
+        </div>
+
+        <?php
+        return ob_get_clean();
+    }     
     
-        <form method="post" class="qa-form mt-4">
-            <div class="mb-3">
-                <label for="qa_question" class="form-label"><?php _e('Nội dung câu hỏi', 'nex2tek-qa'); ?> *</label>
-                <textarea name="qa_question" id="qa_question" class="form-control" rows="5" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="qa_name" class="form-label"><?php _e('Tên của bạn', 'nex2tek-qa'); ?></label>
-                <input type="text" name="qa_name" id="qa_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="qa_phone" class="form-label"><?php _e('Điện thoại', 'nex2tek-qa'); ?></label>
-                <input type="tel" name="qa_phone" id="qa_phone" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label for="qa_email" class="form-label"><?php _e('Email', 'nex2tek-qa'); ?></label>
-                <input type="email" name="qa_email" id="qa_email" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary"><?php _e('Gửi câu hỏi', 'nex2tek-qa'); ?></button>
-        </form>
+    public function qa_question_category_shortcode() {
+        // Get the list of terms belonging to the 'question_category' taxonomy
+        $terms = get_terms([
+            'taxonomy' => 'question_category',
+            'hide_empty' => false,
+            'orderby' => 'name',
+            'order' => 'ASC',
+        ]);
+    
+        if (is_wp_error($terms) || empty($terms)) {
+            return ''; // Return an empty string if no terms are found
+        }
+    
+        ob_start();
+        ?>
+    
+        <div class="qa-category-list p-3">
+            <h5 class="fw-bold text-primary mb-2">Chuyên mục</h5>
+            <hr class="my-2" />
+            <ul class="list-unstyled mb-0">
+                <?php foreach ($terms as $term): ?>
+                    <li class="mb-2">
+                        <a href="<?php echo esc_url(get_term_link($term)); ?>" class="text-dark text-decoration-none">
+                            <?php echo esc_html($term->name); ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    
+        <?php
+        return ob_get_clean();
+    }
+    
+    public function qa_question_statistic_shortcode() {
+        // Get top 5 'question' posts with the highest view count (based on meta_key 'view_count')
+        $top_questions = new WP_Query([
+            'post_type'      => 'question',
+            'posts_per_page' => 5,
+            'post_status'    => 'publish',
+            'meta_key'       => 'view_count',
+            'orderby'        => 'meta_value_num',
+            'order'          => 'DESC',
+        ]);
+    
+        if (!$top_questions->have_posts()) {
+            return '';
+        }
+    
+        ob_start();
+        ?>
+    
+        <div class="qa-most-viewed p-3 bg-white rounded-4 shadow-sm">
+            <h5 class="fw-bold text-primary mb-3">Câu hỏi được xem nhiều nhất</h5>
+            <ol class="list-unstyled mb-0">
+                <?php $i = 1; while ($top_questions->have_posts()): $top_questions->the_post(); ?>
+                    <li class="mb-3">
+                        <div class="fw-semibold"><?php echo $i++ . '. '; ?><a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a></div>
+                        <div>
+                            <small class="text-primary">
+                                (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
+                            </small>
+                        </div>
+                        <?php if ($i <= 6) echo '<hr class="my-2">'; ?>
+                    </li>
+                <?php endwhile; wp_reset_postdata(); ?>
+            </ol>
+        </div>
     
         <?php
         return ob_get_clean();
@@ -261,3 +355,12 @@ add_filter('pll_get_taxonomies', function($taxonomies, $is_translatable) {
     
     return $taxonomies;
 }, 10, 2);
+
+function increase_question_view_count($post_id) {
+    if (get_post_type($post_id) !== 'question') return;
+
+    $views = (int) get_post_meta($post_id, 'view_count', true);
+    $views++;
+    update_post_meta($post_id, 'view_count', $views);
+}
+

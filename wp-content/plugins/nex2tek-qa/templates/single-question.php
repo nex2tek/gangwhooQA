@@ -1,4 +1,6 @@
-<?php get_header(); ?>
+<?php get_header(); 
+ increase_question_view_count(get_the_ID());
+?>
 
 <main class="qa-single">
     <h1><?php the_title(); ?></h1>

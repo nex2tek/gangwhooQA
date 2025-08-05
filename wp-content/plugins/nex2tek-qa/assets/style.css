@@ -1,0 +1,56 @@
+/* Question Form */
+.qa-form-wrapper {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.qa-form textarea,
+.qa-form input {
+    background-color: #f6f6f6;
+    border: none;
+    border-radius: 15px;
+    padding: 8px 10px;
+    font-size: 15px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.qa-form button {
+    background: #ff6105;
+    color: #fff;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.qa-form button:hover {
+    background: #ff8161;
+}
+
+/* Question Category sidebar */
+.qa-category-list {
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+}
+
+.qa-category-list h5 {
+    font-size: 18px;
+    color: #0056d2;
+}
+
+.qa-category-list ul li a {
+    display: block;
+    font-size: 16px;
+    color: #222;
+    transition: 0.2s;
+}
+
+.qa-category-list ul li a:hover {
+    color: #ff6600;
+    text-decoration: underline;
+}
