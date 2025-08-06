@@ -9,6 +9,7 @@ Text Domain: nex2tek-qa
 
 class Nex2Tek_QA {
 
+
     public function __construct() {
         add_action('init', array($this, 'register_post_types'));
         add_action('add_meta_boxes', array($this, 'add_question_meta_box'));
@@ -30,7 +31,6 @@ class Nex2Tek_QA {
             'show_in_rest' => true,
             'show_ui' => true,
             'show_in_menu' => true,
-            'rewrite' => ['slug' => 'cau-hoi'],
             'menu_icon' => 'dashicons-editor-help',
             'comment_status' => 'open',
             'supports' => ['title', 'editor', 'custom-fields', 'comments','thumbnail'],
@@ -99,33 +99,67 @@ class Nex2Tek_QA {
 
     public function qa_list_shortcode() {
         ob_start();
+        
+        $paged = get_query_var('paged') ?: 1;
+
         $query = new WP_Query([
-            'post_type' => 'question',
-            'post_status' => 'publish',
+            'post_type'      => 'question',
+            'post_status'    => 'publish',
             'posts_per_page' => 10,
+            'paged'          => $paged,
         ]);
+    ?>
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Sidebar chuyên mục -->
+            <div class="col-lg-2">
+                <?php echo do_shortcode('[nex2tek_qa_question_category]'); ?>
+            </div>
 
-        if ($query->have_posts()) {
-            echo '<ul class="qa-list">';
-            while ($query->have_posts()) {
-                $query->the_post();
-                $answer = get_post_meta(get_the_ID(), '_answer', true);
-                echo '<li>';
-                echo '<h3>' . get_the_title() . '</h3>';
-                echo '<p>' . get_the_excerpt() . '</p>';
-                if ($answer) {
-                    echo '<div class="qa-answer"><strong>' . __('Trả lời:', 'nex2tek-qa') . '</strong><br>' . wpautop($answer) . '</div>';
-                }
-                echo '</li>';
-            }
-            echo '</ul>';
-        } else {
-            echo '<p>' . __('Không có câu hỏi nào.', 'nex2tek-qa') . '</p>';
-        }
+            <!-- Danh sách câu hỏi -->
+            <div class="col-lg-7">
+                <?php if ($query->have_posts()) : ?>
+                    <ul class="qa-list list-unstyled">
+                        <?php while ($query->have_posts()) : $query->the_post();?>
+                            <li class="mb-4 border-bottom pb-3">
+                                <h5 class="fw-bold mb-2"><?php the_title(); ?></h5>
+                                <div class="text-muted mb-2">
+                                    <small class="text-primary">
+                                        (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
+                                    </small>
+                                </div>
+                                
+                            </li>
+                        <?php endwhile; ?>
+                    </ul>
 
-        wp_reset_postdata();
-        return ob_get_clean();
+                    <!-- Pagination -->
+                    <div class="qa-pagination mt-4">
+                        <?php
+                        echo paginate_links([
+                            'total'   => $query->max_num_pages,
+                            'current' => $paged,
+                            'prev_text' => '&laquo;',
+                            'next_text' => '&raquo;',
+                        ]);
+                        ?>
+                    </div>
+                <?php else : ?>
+                    <p class="text-muted"><?php _e('Không có câu hỏi nào.', 'nex2tek-qa'); ?></p>
+                <?php endif; ?>
+                <?php wp_reset_postdata(); ?>
+            </div>
+
+            <!-- Thống kê bên phải -->
+            <div class="col-lg-3">
+                <?php echo do_shortcode('[nex2tek_qa_question_statistic]'); ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
     }
+
 
     public function qa_form_shortcode() {
         ob_start();
@@ -278,11 +312,6 @@ class Nex2Tek_QA {
             if (file_exists($custom_template)) return $custom_template;
         }
 
-        // Giao diện danh sách câu hỏi
-        if (is_post_type_archive('question')) {
-            $custom_template = plugin_dir_path(__FILE__) . 'templates/archive-question.php';
-            if (file_exists($custom_template)) return $custom_template;
-        }
 
         // Giao diện chi tiết bác sĩ
         if (is_singular('doctor')) {
@@ -290,7 +319,7 @@ class Nex2Tek_QA {
             if (file_exists($custom_template)) return $custom_template;
         }
 
-        if(is_page('gui-cau-hoi')) {
+        if(is_page('gui-cau-hoi') || is_page('hoi-dap')) {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/page-question.php';
             if (file_exists($custom_template)) return $custom_template;
         }
@@ -329,6 +358,20 @@ function nex2tek_qa_create_pages() {
             'post_title'   => 'Gửi câu hỏi',
             'post_name'    => 'gui-cau-hoi',
             'post_content' => '[nex2tek_qa_form]',
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+        ]);
+
+        if (function_exists('pll_set_post_language')) {
+            pll_set_post_language($post_id, $default_lang);
+        }
+    }
+    
+    if (!get_page_by_path('hoi-dap')) {
+        $post_id = wp_insert_post([
+            'post_title'   => 'Hỏi Đáp',
+            'post_name'    => 'hoi-dap',
+            'post_content' => '[nex2tek_qa_list]',
             'post_status'  => 'publish',
             'post_type'    => 'page',
         ]);
