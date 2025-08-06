@@ -1,4 +1,39 @@
 /* Question Form */
+.qa-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 15px;
+}
+
+.qa-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.qa-sidebar-left {
+    flex: 0 0 14%;
+}
+
+.qa-main-form {
+    flex: 1 1 60%;
+}
+
+.qa-sidebar-right {
+    flex: 0 0 24%;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .qa-sidebar-left,
+    .qa-sidebar-right,
+    .qa-main-form {
+        flex: 0 0 100%;
+        order: unset;
+    }
+}
+
 .qa-form-wrapper {
     background: #fff;
     border-radius: 15px;

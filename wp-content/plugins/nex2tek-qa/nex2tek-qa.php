@@ -300,12 +300,9 @@ class Nex2Tek_QA {
 
     public function enqueue_assets() {
         // Styles
-        wp_enqueue_style('bootstrap-icon', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css', [], '1.13.1');
-        wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', [], '5.0.0');
         wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], '1.0.0');
 
         // Scripts
-        wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', ['jquery'], '5.0.0', true);
         wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/scripts.js', ['jquery'], '1.0.0', true);
     }
    
