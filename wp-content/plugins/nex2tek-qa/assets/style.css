@@ -203,6 +203,19 @@
     border-radius: 15px;
     padding: 10px;
 }
+.qa-list h3{
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 26px;
+    margin-bottom: 10px;
+    transition: all .3s linear;
+}
+.qa-list h3 a{
+    text-decoration: none;
+}
+.qa-list h3 a:hover{
+    color: var(--primary);
+}
 .qa-avatar{
     border-radius: 50%;
     margin-right: 5px;
@@ -214,6 +227,11 @@
 .qa-item:last-child{
     border: none;
 }
+.qa-name{
+    font-size: 14px;
+    color: #222;
+}
+
 
 /* Pagination */
 .qa-pagination {
@@ -258,3 +276,16 @@
     color: var(--primary);
     font-size: 40px;
 }   
+
+.qa-alert{
+    padding: 10px;
+    border-radius: 10px;
+}
+.qa-alert-success{
+    background-color: #d3f8de;
+    color: green;
+}
+.qa-alert-danger{
+    background-color: #f8d7da;
+    color: red;
+}

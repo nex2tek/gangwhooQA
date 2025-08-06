@@ -12,12 +12,14 @@
             <div class="qa-form-wrapper">
                 <h3>ĐẶT CÂU HỎI</h3>
                 <p>Quý khách vui lòng điền đầy đủ thông tin bên dưới</p>
-
                 <?php if ($success): ?>
-                    <div class="alert alert-success">Câu hỏi của bạn đã được gửi thành công.</div>
+                    <p class="qa-success qa-alert qa-alert-success"><?php _e('Câu hỏi của bạn đã được gửi thành công!', 'nex2tek-qa'); ?></p>
+                <?php elseif (!empty($error)): ?>
+                    <p class="qa-error qa-alert qa-alert-error"><?php echo esc_html($error); ?></p>
                 <?php endif; ?>
 
                 <form method="post" class="qa-form">
+                    <?php wp_nonce_field('qa_submit_form', 'qa_nonce'); ?>
                     <label for="qa_question" class="form-label fw-semibold">
                         Nội dung câu hỏi <span class="qa-text-danger">*</span>
                     </label>
