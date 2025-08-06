@@ -23,6 +23,7 @@ class Nex2Tek_QA {
         add_shortcode('nex2tek_qa_doctor_statistic', array($this, 'qa_doctor_statistic_shortcode'));
         add_action('add_meta_boxes', array($this, 'add_doctor_title_meta_box'));
         add_action('save_post_doctor', array($this, 'save_doctor_meta'));
+        add_action('pre_get_posts', array($this, 'custom_post_query_question_category'));
     }
 
     public function register_post_types() {
@@ -36,6 +37,10 @@ class Nex2Tek_QA {
             'show_in_menu' => true,
             'menu_icon' => 'dashicons-editor-help',
             'comment_status' => 'open',
+            'rewrite' => [
+                'slug' => 'cau-hoi',
+                'with_front' => false
+            ],
             'supports' => ['title', 'editor', 'custom-fields', 'comments','thumbnail'],
         ]);
 
@@ -44,6 +49,7 @@ class Nex2Tek_QA {
             'label' => __('Bác sĩ', 'nex2tek-qa'),
             'public' => true,
             'show_in_rest' => true,
+
             'menu_icon' => 'dashicons-groups',
             'supports' => ['title', 'editor', 'custom-fields','thumbnail', 'excerpt'],
         ]);
@@ -51,8 +57,10 @@ class Nex2Tek_QA {
         // Taxonomy: Chuyên mục
         register_taxonomy('question_category', 'question', [
             'label' => __('Chuyên mục câu hỏi', 'nex2tek-qa'),
-            'hierarchical' => true,
-            'show_in_rest' => true,
+            'hierarchical'  => true,
+            'show_in_rest'  => true,
+            'public'        => true,
+            'rewrite'       => ['slug' => 'chuyen-muc-cau-hoi'],
         ]);
     }
 
@@ -128,7 +136,7 @@ class Nex2Tek_QA {
         $query = new WP_Query([
             'post_type'      => 'question',
             'post_status'    => 'publish',
-            'posts_per_page' => 12,
+            'posts_per_page' => 3,
             'paged'          => $paged,
         ]);
    
@@ -362,22 +370,23 @@ class Nex2Tek_QA {
     }    
 
     public function override_templates($template) {
-        // Giao diện chi tiết câu hỏi
+        // question detail UI
         if (is_singular('question')) {
+           
             $custom_template = plugin_dir_path(__FILE__) . 'templates/single-question.php';
             if (file_exists($custom_template)) return $custom_template;
         }
-        // Giao diện chi tiết bác sĩ
+        // doctor detail UI
         if (is_singular('doctor')) {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/single-doctor.php';
             if (file_exists($custom_template)) return $custom_template;
         }
-
+        // question page UI
         if(is_page('gui-cau-hoi') || is_page('hoi-dap')) {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/page-question.php';
             if (file_exists($custom_template)) return $custom_template;
         }
-        // Giao diện category của câu hỏi
+        // question category page UI
         if (is_tax('question_category')) {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/taxonomy-question_category.php';
             if (file_exists($custom_template)) return $custom_template;
@@ -386,20 +395,29 @@ class Nex2Tek_QA {
         return $template;
     }
 
+    public function custom_post_query_question_category($query) {
+        if (!is_admin() && $query->is_main_query() && is_tax('question_category')) {
+         
+            $query->set('posts_per_page', 12);
+        }
+        
+    }
+
     public function enqueue_assets() {
         // Styles
         wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], '1.0.0');
 
         // Scripts
-        wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/scripts.js', ['jquery'], '1.0.0', true);
+        wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], '1.0.0', true);
     }
+
+   
    
 }
 
-// Khởi tạo class
 new Nex2Tek_QA();
 
-// Hook tạo page khi kích hoạt
+// Hook create pages when plugin activated
 register_activation_hook(__FILE__, 'nex2tek_qa_create_pages');
 function nex2tek_qa_create_pages() {
     $default_lang = function_exists('pll_default_language') ? pll_default_language() : 'vi';
@@ -433,7 +451,7 @@ function nex2tek_qa_create_pages() {
     }
 }
 
-// Cho phép Polylang hỗ trợ CPT 'question', 'doctor'
+// apply polylang support
 add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
     $post_types['question'] = 'question';
     $post_types['doctor'] = 'doctor';
@@ -441,10 +459,9 @@ add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
     return $post_types;
 }, 10, 2);
 
-// Cho phép Polylang hỗ trợ taxonomy 'question_category'
+// apply polylang support
 add_filter('pll_get_taxonomies', function($taxonomies, $is_translatable) {
     $taxonomies['question_category'] = true;
-    
     return $taxonomies;
 }, 10, 2);
 
