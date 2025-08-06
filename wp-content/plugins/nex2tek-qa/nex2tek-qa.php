@@ -514,7 +514,7 @@ add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
 // apply polylang support
 add_filter('pll_get_taxonomies', function ($taxonomies, $is_translatable) {
     if ($is_translatable) {
-        $taxonomies['question_category'] = true;
+        $taxonomies['question_category'] = 'question_category';
     }
     return $taxonomies;
 }, 10, 2);
