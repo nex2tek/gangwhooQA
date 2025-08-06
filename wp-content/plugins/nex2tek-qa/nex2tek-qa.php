@@ -267,8 +267,10 @@ class Nex2Tek_QA {
     }
     
     public function qa_question_statistic_shortcode() {
-        // Get top 5 'question' posts with the highest view count (based on meta_key 'view_count')
-        $top_questions = new WP_Query([
+        ob_start();
+    
+        // --- Top viewed questions ---
+        $top_viewed_questions = new WP_Query([
             'post_type'      => 'question',
             'posts_per_page' => 5,
             'post_status'    => 'publish',
@@ -277,33 +279,75 @@ class Nex2Tek_QA {
             'order'          => 'DESC',
         ]);
     
-        if (!$top_questions->have_posts()) {
-            return '';
-        }
+        if ($top_viewed_questions->have_posts()):
+            ?>
+            <div class="qa-most-viewed p-3 bg-white rounded-4 shadow-sm mb-4">
+                <h5 class="fw-bold text-primary mb-3">Câu hỏi được xem nhiều nhất</h5>
+                <ol class="qa-most-viewed-list list-unstyled mb-0">
+                    <?php $i = 1; while ($top_viewed_questions->have_posts()): $top_viewed_questions->the_post(); ?>
+                        <li class="mb-3">
+                            <div class="fw-semibold qa-most-viewed-item">
+                                <?php echo $i++ . '. '; ?>
+                                <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a>
+                            </div>
+                            <div>
+                                <small class="text-primary">
+                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
+                                </small>
+                            </div>
+                        </li>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </ol>
+            </div>
+            <?php
+        endif;
     
-        ob_start();
-        ?>
+        // --- Top commented questions ---
+        global $wpdb;
+
+        $post_ids = $wpdb->get_col("
+            SELECT ID FROM {$wpdb->posts}
+            WHERE post_type = 'question'
+            AND post_status = 'publish'
+            AND comment_count > 0
+            ORDER BY comment_count DESC
+            LIMIT 5
+        ");
+
+        if (empty($post_ids)) return '';
+
+        $most_commented_questions = new WP_Query([
+            'post_type' => 'question',
+            'post__in' => $post_ids,
+            'orderby' => 'post__in',
+            'posts_per_page' => 5
+        ]);
+
+        if ($most_commented_questions->have_posts()):
+            ?>
+            <div class="qa-most-viewed p-3 bg-white rounded-4 shadow-sm mb-4">
+                <h5 class="fw-bold text-primary mb-3">Câu hỏi nhiều bình luận nhất</h5>
+                <ol class="qa-most-viewed-list list-unstyled mb-0">
+                    <?php $i = 1; while ($most_commented_questions->have_posts()): $most_commented_questions->the_post(); ?>
+                        <li class="mb-3">
+                            <div class="fw-semibold qa-most-viewed-item">
+                                <?php echo $i++ . '. '; ?>
+                                <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a>
+                            </div>
+                            <div>
+                                <small class="text-primary">
+                                    (<?php echo get_comments_number(); ?> comment)
+                                </small>
+                            </div>
+                        </li>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                </ol>
+            </div>
+            <?php
+        endif;
     
-        <div class="qa-most-viewed p-3 bg-white rounded-4 shadow-sm">
-            <h5 class="fw-bold text-primary mb-3">Câu hỏi được xem nhiều nhất</h5>
-            <ol class="list-unstyled mb-0">
-                <?php $i = 1; while ($top_questions->have_posts()): $top_questions->the_post(); ?>
-                    <li class="mb-3">
-                        <div class="fw-semibold"><?php echo $i++ . '. '; ?><a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a></div>
-                        <div>
-                            <small class="text-primary">
-                                (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
-                            </small>
-                        </div>
-                        <?php if ($i <= 6) echo '<hr class="my-2">'; ?>
-                    </li>
-                <?php endwhile; wp_reset_postdata(); ?>
-            </ol>
-        </div>
-    
-        <?php
         return ob_get_clean();
-    }    
+    }        
 
     public function override_templates($template) {
         // Giao diện chi tiết câu hỏi
