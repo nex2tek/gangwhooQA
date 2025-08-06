@@ -122,7 +122,7 @@ class Nex2Tek_QA {
         $query = new WP_Query([
             'post_type'      => 'question',
             'post_status'    => 'publish',
-            'posts_per_page' => 3,
+            'posts_per_page' => 12,
             'paged'          => $paged,
             'tax_query'      => [
                 [
