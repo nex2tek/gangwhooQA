@@ -20,6 +20,7 @@ class Nex2Tek_QA {
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
         add_shortcode('nex2tek_qa_question_category', array($this, 'qa_question_category_shortcode'));
         add_shortcode('nex2tek_qa_question_statistic', array($this, 'qa_question_statistic_shortcode'));
+        
     }
 
     public function register_post_types() {
@@ -100,82 +101,40 @@ class Nex2Tek_QA {
     public function qa_list_shortcode() {
         ob_start();
         
-        $paged = get_query_var('paged') ?: 1;
+        $paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
 
         $query = new WP_Query([
             'post_type'      => 'question',
             'post_status'    => 'publish',
-            'posts_per_page' => 10,
+            'posts_per_page' => 12,
             'paged'          => $paged,
         ]);
-    ?>
-    <div class="container mt-4">
-        <div class="row">
-            <!-- Sidebar chuyên mục -->
-            <div class="col-lg-2">
-                <?php echo do_shortcode('[nex2tek_qa_question_category]'); ?>
-            </div>
-
-            <!-- Danh sách câu hỏi -->
-            <div class="col-lg-7">
-                <?php if ($query->have_posts()) : ?>
-                    <ul class="qa-list list-unstyled">
-                        <?php while ($query->have_posts()) : $query->the_post();?>
-                            <li class="mb-4 border-bottom pb-3">
-                                <h5 class="fw-bold mb-2"><?php the_title(); ?></h5>
-                                <div class="text-muted mb-2">
-                                    <small class="text-primary">
-                                        (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
-                                    </small>
-                                </div>
-                                
-                            </li>
-                        <?php endwhile; ?>
-                    </ul>
-
-                    <!-- Pagination -->
-                    <div class="qa-pagination mt-4">
-                        <?php
-                        echo paginate_links([
-                            'total'   => $query->max_num_pages,
-                            'current' => $paged,
-                            'prev_text' => '&laquo;',
-                            'next_text' => '&raquo;',
-                        ]);
-                        ?>
-                    </div>
-                <?php else : ?>
-                    <p class="text-muted"><?php _e('Không có câu hỏi nào.', 'nex2tek-qa'); ?></p>
-                <?php endif; ?>
-                <?php wp_reset_postdata(); ?>
-            </div>
-
-            <!-- Thống kê bên phải -->
-            <div class="col-lg-3">
-                <?php echo do_shortcode('[nex2tek_qa_question_statistic]'); ?>
-            </div>
-        </div>
-    </div>
-    <?php
-    return ob_get_clean();
+   
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-qa-list.php';
+        if (file_exists($template_file)) {
+            include $template_file;
+        }
+        return ob_get_clean();
     }
 
 
     public function qa_form_shortcode() {
         ob_start();
-    
+
+        $success = false;
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
             $question_content = sanitize_textarea_field($_POST['qa_question']);
-            $name    = sanitize_text_field($_POST['qa_name']);
-            $phone   = sanitize_text_field($_POST['qa_phone']);
-            $email   = sanitize_email($_POST['qa_email']);
-    
+            $name  = sanitize_text_field($_POST['qa_name']);
+            $phone = sanitize_text_field($_POST['qa_phone']);
+            $email = sanitize_email($_POST['qa_email']);
+
             $meta_data = [
-                'name'  => $name,
-                'phone' => $phone,
-                'email' => $email,
+                'qa_name'  => $name,
+                'qa_phone' => $phone,
+                'qa_email' => $email,
             ];
-    
+
             $post_id = wp_insert_post([
                 'post_type'    => 'question',
                 'post_title'   => wp_trim_words($question_content, 10),
@@ -183,54 +142,19 @@ class Nex2Tek_QA {
                 'post_status'  => 'pending',
                 'meta_input'   => $meta_data,
             ]);
-    
+
             if ($post_id) {
-                echo '<div class="alert alert-success">Câu hỏi của bạn đã được gửi thành công.</div>';
+                $success = true;
             }
         }
-        ?>
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-lg-2">
-                    <?php echo do_shortcode('[nex2tek_qa_question_category]'); ?>
-                </div>
-                <div class="col-lg-7">
-                    <div class="qa-form-wrapper p-4 rounded-4 shadow-sm bg-white">
-                        <h3 class="fw-bold mb-2">ĐẶT CÂU HỎI</h3>
-                        <p class="text-muted mb-4">Quý khách vui lòng điền đầy đủ thông bên dưới</p>
-                        <form method="post" class="qa-form">
-                            <div class="mb-3">
-                                <label for="qa_question" class="form-label fw-semibold">
-                                    Nội dung câu hỏi <span class="text-danger">*</span>
-                                </label>
-                                <textarea name="qa_question" id="qa_question" class="form-control px-3 py-2" rows="4" required placeholder="Nhập nội dung câu hỏi..."></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" name="qa_name" id="qa_name" class="form-control px-3 py-2" placeholder="Tên của bạn" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="tel" name="qa_phone" id="qa_phone" class="form-control px-3 py-2" placeholder="Điện thoại" required>
-                            </div>
-                            <div class="mb-3">
-                                <input type="email" name="qa_email" id="qa_email" class="form-control px-3 py-2" placeholder="Email" required>
-                            </div>
-                            <div class="text-center mt-4">
-                                <button type="submit" class="btn text-white px-4 py-2 fw-bold">
-                                    ĐẶT CÂU HỎI
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <?php echo do_shortcode('[nex2tek_qa_question_statistic]'); ?>
-                </div>
-            </div>
-        </div>
 
-        <?php
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-qa-form.php';
+        if(file_exists($template_file)) {
+            include $template_file;
+        }
+
         return ob_get_clean();
-    }     
+    }    
     
     public function qa_question_category_shortcode() {
         // Get the list of terms belonging to the 'question_category' taxonomy
@@ -355,8 +279,6 @@ class Nex2Tek_QA {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/single-question.php';
             if (file_exists($custom_template)) return $custom_template;
         }
-
-
         // Giao diện chi tiết bác sĩ
         if (is_singular('doctor')) {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/single-doctor.php';
