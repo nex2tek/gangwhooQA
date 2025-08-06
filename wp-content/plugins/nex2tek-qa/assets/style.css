@@ -6,6 +6,10 @@
     padding: 0 15px;
 }
 
+.qa-text-danger {
+    color: red;
+}
+
 .qa-row {
     display: flex;
     flex-wrap: wrap;
@@ -40,27 +44,46 @@
     padding: 30px;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
     margin-bottom: 15px;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-weight: 400;
+}
+
+.qa-form-wrapper h3 {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 26px;
 }
 
 .qa-form textarea,
 .qa-form input {
-    background-color: #f6f6f6;
-    border: none;
-    border-radius: 15px;
-    padding: 8px 10px;
-    font-size: 15px;
     width: 100%;
+    padding: 8px 10px;
+    outline: none;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 10px;
     margin-bottom: 15px;
+    box-sizing: border-box; /* ✅ thêm dòng này */
+}
+
+.qa-form input {
+    height: 40px;
+}
+
+.qa-form .btn-group {
+    text-align: center;
 }
 
 .qa-form button {
     background: #ff6105;
     color: #fff;
     border: none;
-    padding: 10px 30px;
+    padding: 15px 30px;
     border-radius: 5px;
     text-transform: uppercase;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .qa-form button:hover {
@@ -76,9 +99,17 @@
 }
 
 .qa-category-list h5 {
+    font-weight: 600;
     font-size: 18px;
+    padding: 0 10px 10px;
     color: #0056d2;
-    padding: 5px 6px;
+    border-bottom: 1px solid #ccc;
+}
+
+.qa-category-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
 }
 
 .qa-category-list ul li a {
@@ -88,6 +119,8 @@
     padding: 5px 6px;
     transition: all .25s linear;
     border-radius: 5px;
+    text-decoration: none;
+    font-weight: 400;
 }
 
 .qa-category-list ul li:hover {
@@ -107,15 +140,38 @@
 }
 
 .qa-most-viewed h5 {
+    font-weight: 600;
     font-size: 18px;
+    padding: 0 10px 10px;
     color: #0056d2;
-    padding: 5px 6px;
+    border-bottom: 1px solid #ccc;
     text-align: center;
+    margin: 0;
+}
+
+.qa-most-viewed .qa-most-viewed-list {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
 }
 
 .qa-most-viewed .qa-most-viewed-list li {
     margin-bottom: 7px;
     padding-bottom: 7px;
+    display: block;
+    font-size: 16px;
+    color: #222;
+    transition: all .25s linear;
+    font-weight: 400;
+}
+
+.qa-most-viewed .qa-most-viewed-list li a {
+    text-decoration: none;
+}
+
+.qa-most-viewed .qa-view-count {
+    color: #0b48bd;
+    font-size: 12px;
 }
 
 .qa-most-viewed .qa-most-viewed-list > li .qa-most-viewed-item:hover,

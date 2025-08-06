@@ -173,8 +173,7 @@ class Nex2Tek_QA {
         ?>
     
         <div class="qa-category-list p-3">
-            <h5 class="fw-bold text-primary mb-2">Chuyên mục</h5>
-            <hr class="my-2" />
+            <h5>Chuyên mục</h5>
             <ul class="list-unstyled mb-0">
                 <?php foreach ($terms as $term): ?>
                     <li class="mb-2">
@@ -205,17 +204,17 @@ class Nex2Tek_QA {
     
         if ($top_viewed_questions->have_posts()):
             ?>
-            <div class="qa-most-viewed p-3 bg-white rounded-4 shadow-sm mb-4">
-                <h5 class="fw-bold text-primary mb-3">Câu hỏi được xem nhiều nhất</h5>
+            <div class="qa-most-viewed">
+                <h5>Câu hỏi được xem nhiều nhất</h5>
                 <ol class="qa-most-viewed-list list-unstyled mb-0">
                     <?php $i = 1; while ($top_viewed_questions->have_posts()): $top_viewed_questions->the_post(); ?>
-                        <li class="mb-3">
-                            <div class="fw-semibold qa-most-viewed-item">
+                        <li>
+                            <div class="qa-most-viewed-item">
                                 <?php echo $i++ . '. '; ?>
-                                <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a>
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                             </div>
                             <div>
-                                <small class="text-primary">
+                                <small class="qa-view-count">
                                     (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
                                 </small>
                             </div>
@@ -249,17 +248,17 @@ class Nex2Tek_QA {
 
         if ($most_commented_questions->have_posts()):
             ?>
-            <div class="qa-most-viewed p-3 bg-white rounded-4 shadow-sm mb-4">
-                <h5 class="fw-bold text-primary mb-3">Câu hỏi nhiều bình luận nhất</h5>
+            <div class="qa-most-viewed">
+                <h5>Câu hỏi nhiều bình luận nhất</h5>
                 <ol class="qa-most-viewed-list list-unstyled mb-0">
                     <?php $i = 1; while ($most_commented_questions->have_posts()): $most_commented_questions->the_post(); ?>
-                        <li class="mb-3">
-                            <div class="fw-semibold qa-most-viewed-item">
+                        <li>
+                            <div class="qa-most-viewed-item">
                                 <?php echo $i++ . '. '; ?>
-                                <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a>
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                             </div>
                             <div>
-                                <small class="text-primary">
+                                <small class="qa-view-count">
                                     (<?php echo get_comments_number(); ?> comment)
                                 </small>
                             </div>

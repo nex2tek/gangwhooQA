@@ -10,8 +10,8 @@
         <!-- Form câu hỏi -->
         <div class="qa-col qa-main-form">
             <div class="qa-form-wrapper">
-                <h3 class="fw-bold mb-2">ĐẶT CÂU HỎI</h3>
-                <p class="text-muted mb-4">Quý khách vui lòng điền đầy đủ thông tin bên dưới</p>
+                <h3>ĐẶT CÂU HỎI</h3>
+                <p>Quý khách vui lòng điền đầy đủ thông tin bên dưới</p>
 
                 <?php if ($success): ?>
                     <div class="alert alert-success">Câu hỏi của bạn đã được gửi thành công.</div>
@@ -19,7 +19,7 @@
 
                 <form method="post" class="qa-form">
                     <label for="qa_question" class="form-label fw-semibold">
-                        Nội dung câu hỏi <span class="text-danger">*</span>
+                        Nội dung câu hỏi <span class="qa-text-danger">*</span>
                     </label>
                     <textarea name="qa_question" id="qa_question" rows="4" required placeholder="Nhập nội dung câu hỏi..."></textarea>
 
@@ -27,7 +27,7 @@
                     <input type="tel" name="qa_phone" id="qa_phone" placeholder="Điện thoại" required>
                     <input type="email" name="qa_email" id="qa_email" placeholder="Email" required>
 
-                    <div class="text-center mt-4">
+                    <div class="text-center mt-4 btn-group">
                         <button type="submit">ĐẶT CÂU HỎI</button>
                     </div>
                 </form>
