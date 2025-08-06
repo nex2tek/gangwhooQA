@@ -340,6 +340,7 @@ class Nex2Tek_QA {
     public function enqueue_assets() {
         // Styles
         wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], '1.0.0');
+        wp_enqueue_style('nex2tek-question-detail-style', plugin_dir_url(__FILE__) . 'assets/question-detail.css', [], '1.0.0');
 
         // Scripts
         wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], '1.0.0', true);
