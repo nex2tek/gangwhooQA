@@ -49,18 +49,27 @@ class Nex2Tek_QA {
             'label' => __('Bác sĩ', 'nex2tek-qa'),
             'public' => true,
             'show_in_rest' => true,
-
             'menu_icon' => 'dashicons-groups',
+            'rewrite' => [
+                'slug' => 'bac-si',
+                'with_front' => false
+            ],
             'supports' => ['title', 'editor', 'custom-fields','thumbnail', 'excerpt'],
         ]);
 
         // Taxonomy: Chuyên mục
-        register_taxonomy('question_category', 'question', [
+      register_taxonomy('question_category', 'question', [
             'label' => __('Chuyên mục câu hỏi', 'nex2tek-qa'),
-            'hierarchical'  => true,
-            'show_in_rest'  => true,
-            'public'        => true,
-            'rewrite'       => ['slug' => 'chuyen-muc-cau-hoi'],
+            'public' => true,
+            'hierarchical' => true,
+            'show_ui' => true,
+            'show_in_rest' => true,
+            'show_admin_column' => true,
+            'rewrite' => ['slug' => 'chuyen-muc-cau-hoi'],
+            'labels' => [
+                'name' => __('Chuyên mục câu hỏi', 'nex2tek-qa'),
+                'singular_name' => __('Chuyên mục', 'nex2tek-qa'),
+            ],
         ]);
     }
 
@@ -130,14 +139,21 @@ class Nex2Tek_QA {
 
     public function qa_list_shortcode() {
         ob_start();
-        
+        $current_lang = pll_current_language();
         $paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
 
         $query = new WP_Query([
             'post_type'      => 'question',
             'post_status'    => 'publish',
-            'posts_per_page' => 3,
+            'posts_per_page' => 12,
             'paged'          => $paged,
+            'tax_query'      => [
+                [
+                    'taxonomy' => 'language',
+                    'field'    => 'slug',
+                    'terms'    => $current_lang,
+                ],
+            ],
         ]);
    
         $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-qa-list.php';
@@ -367,10 +383,18 @@ class Nex2Tek_QA {
     
         <?php
         return ob_get_clean();
-    }    
+    }        
+    private function get_translated_page_id_by_slug($slug) {
+        $page = get_page_by_path($slug);
+        if (!$page) return false;
+        return function_exists('pll_get_post') ? pll_get_post($page->ID) : $page->ID;
+    }
 
     public function override_templates($template) {
         // question detail UI
+
+         $is_page_question      = $this->get_translated_page_id_by_slug('hoi-dap');
+         $is_page_question_form  = $this->get_translated_page_id_by_slug('gui-cau-hoi');
         if (is_singular('question')) {
            
             $custom_template = plugin_dir_path(__FILE__) . 'templates/single-question.php';
@@ -382,7 +406,7 @@ class Nex2Tek_QA {
             if (file_exists($custom_template)) return $custom_template;
         }
         // question page UI
-        if(is_page('gui-cau-hoi') || is_page('hoi-dap')) {
+        if(is_page($is_page_question) || is_page($is_page_question_form)) {
             $custom_template = plugin_dir_path(__FILE__) . 'templates/page-question.php';
             if (file_exists($custom_template)) return $custom_template;
         }
@@ -460,8 +484,10 @@ add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
 }, 10, 2);
 
 // apply polylang support
-add_filter('pll_get_taxonomies', function($taxonomies, $is_translatable) {
-    $taxonomies['question_category'] = true;
+add_filter('pll_get_taxonomies', function ($taxonomies, $is_translatable) {
+    if ($is_translatable) {
+        $taxonomies['question_category'] = true;
+    }
     return $taxonomies;
 }, 10, 2);
 
