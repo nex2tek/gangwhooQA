@@ -34,6 +34,7 @@
                     </div>
                 </form>
             </div>
+            <?php echo do_shortcode('[nex2tek_qa_doctor_statistic]'); ?>
         </div>
 
         <!-- Sidebar thống kê -->
