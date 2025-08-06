@@ -8,7 +8,9 @@
 .align-items-center{
     align-items: center;
 }
-
+.text-center{
+    text-align: center;
+}
 /* Question Form */
 .qa-container {
     width: 100%;
@@ -250,3 +252,9 @@
 .qa-pagination .next {
   font-weight: bold;
 }
+
+.qa-cat-description p span{
+    font-weight: bold;
+    color: var(--primary);
+    font-size: 40px;
+}   
