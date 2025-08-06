@@ -12,16 +12,16 @@
 
         <!-- Form câu hỏi -->
         <div class="qa-col qa-main-form">
+            <?php echo do_shortcode('[nex2tek_qa_doctor_statistic]'); ?>
             <div class="qa-form-wrapper">
                <?php if ($query->have_posts()) : ?>
                 <div class="qa-list list-unstyled">
                     <?php while ($query->have_posts()) : $query->the_post();?>
                         <div class="mb-4 border-bottom pb-3 qa-item">
                             <h3 class="fw-bold mb-2"> <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a></h3>
-                            
                             <div class="text-muted mb-2">
                                 <div class="text-primary d-flex align-items-center">    
-                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"><?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: 'Người ẩn danh'; ?>
+                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"> <span class="qa-name"> <?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: __('Người ẩn danh', 'nex2tek-qa'); ?> </span>
                                 </div>
                             </div>
                             <div class="description mb-2"><?php the_excerpt(); ?></div>

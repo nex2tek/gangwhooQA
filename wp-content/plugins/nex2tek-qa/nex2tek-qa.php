@@ -20,6 +20,9 @@ class Nex2Tek_QA {
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
         add_shortcode('nex2tek_qa_question_category', array($this, 'qa_question_category_shortcode'));
         add_shortcode('nex2tek_qa_question_statistic', array($this, 'qa_question_statistic_shortcode'));
+        add_shortcode('nex2tek_qa_doctor_statistic', array($this, 'qa_doctor_statistic_shortcode'));
+        add_action('add_meta_boxes', array($this, 'add_doctor_title_meta_box'));
+        add_action('save_post_doctor', array($this, 'save_doctor_meta'));
         add_action('pre_get_posts', array($this, 'custom_post_query_question_category'));
     }
 
@@ -51,7 +54,7 @@ class Nex2Tek_QA {
                 'slug' => 'bac-si',
                 'with_front' => false
             ],
-            'supports' => ['title', 'editor', 'custom-fields','thumbnail'],
+            'supports' => ['title', 'editor', 'custom-fields','thumbnail', 'excerpt'],
         ]);
 
         // Taxonomy: Chuyên mục
@@ -78,6 +81,20 @@ class Nex2Tek_QA {
             'question',
             'normal',
             'high'
+        );
+    }
+
+    public function add_doctor_title_meta_box() {
+        add_meta_box(
+            'doctor_title_meta',
+            'Chức danh bác sĩ',
+            function($post) {
+                $value = get_post_meta($post->ID, 'doctor_title', true);
+                echo '<input type="text" name="doctor_title" value="' . esc_attr($value) . '" class="widefat">';
+            },
+            'doctor',
+            'normal',
+            'default'
         );
     }
 
@@ -114,6 +131,12 @@ class Nex2Tek_QA {
         }
     }
 
+    public function save_doctor_meta($post_id) {
+        if (array_key_exists('doctor_title', $_POST)) {
+            update_post_meta($post_id, 'doctor_title', sanitize_text_field($_POST['doctor_title']));
+        }
+    }
+
     public function qa_list_shortcode() {
         ob_start();
         $current_lang = pll_current_language();
@@ -145,8 +168,14 @@ class Nex2Tek_QA {
         ob_start();
 
         $success = false;
+        $error = '';
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
+        if (
+            $_SERVER['REQUEST_METHOD'] === 'POST' &&
+            !empty($_POST['qa_question']) &&
+            isset($_POST['qa_nonce']) &&
+            wp_verify_nonce($_POST['qa_nonce'], 'qa_submit_form')
+        ) {
             $question_content = sanitize_textarea_field($_POST['qa_question']);
             $name  = sanitize_text_field($_POST['qa_name']);
             $phone = sanitize_text_field($_POST['qa_phone']);
@@ -158,26 +187,48 @@ class Nex2Tek_QA {
                 'qa_email' => $email,
             ];
 
-            $post_id = wp_insert_post([
-                'post_type'    => 'question',
-                'post_title'   => wp_trim_words($question_content, 10),
-                'post_content' => $question_content,
-                'post_status'  => 'pending',
-                'meta_input'   => $meta_data,
+            // Check if similar question already exists (by content + email)
+            $existing = get_posts([
+                'post_type'   => 'question',
+                'post_status' => 'pending',
+                's'           => $question_content,
+                'meta_query'  => [
+                    [
+                        'key'     => 'qa_email',
+                        'value'   => $email,
+                        'compare' => '='
+                    ]
+                ],
+                'numberposts' => 1,
+                'fields'      => 'ids',
             ]);
+           
+            if (empty($existing)) {
+                $post_id = wp_insert_post([
+                    'post_type'    => 'question',
+                    'post_title'   => wp_trim_words($question_content, 10),
+                    'post_content' => $question_content,
+                    'post_status'  => 'pending',
+                    'meta_input'   => $meta_data,
+                ]);
 
-            if ($post_id) {
-                $success = true;
+                if ($post_id) {
+                    $success = true;
+                } else {
+                    $error = __('Gửi câu hỏi thất bại. Vui lòng thử lại sau.', 'nex2tek-qa');
+                }
             }
         }
 
+        // Load form template
         $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-qa-form.php';
-        if(file_exists($template_file)) {
+        if (file_exists($template_file)) {
             include $template_file;
         }
 
         return ob_get_clean();
-    }    
+    }
+   
     
     public function qa_question_category_shortcode() {
         // Get the list of terms belonging to the 'question_category' taxonomy
@@ -292,6 +343,73 @@ class Nex2Tek_QA {
             <?php
         endif;
     
+        return ob_get_clean();
+    }     
+    
+    public function qa_doctor_statistic_shortcode() {
+        // Get all published doctors
+        $doctors = new WP_Query([
+            'post_type'      => 'doctor',
+            'posts_per_page' => 10,
+            'post_status'    => 'publish',
+        ]);
+    
+        if (!$doctors->have_posts()) {
+            return '';
+        }
+    
+        ob_start(); ?>
+        
+        <div class="qa-doctor-grid-wrapper">
+            <div class="qa-doctor-grid">
+                <?php
+                $i = 0;
+                while ($doctors->have_posts()): $doctors->the_post();
+                    $hidden = $i >= 4 ? ' qa-doctor-hidden' : '';
+                    ?>
+                    <div class="qa-doctor-card<?php echo $hidden; ?>">
+                        <a href="<?php the_permalink(); ?>">
+                            <div class="qa-doctor-avatar">
+                                    <?php if (has_post_thumbnail()) {
+                                        the_post_thumbnail('medium');
+                                    } ?>
+                            </div>
+                            <p class="qa-doctor-title"><?php echo esc_html(get_post_meta(get_the_ID(), 'doctor_title', true)); ?></p>
+                            <h4 class="qa-doctor-name"><?php the_title(); ?></h4>
+                        </a>
+                        <div class="qa-doctor-desc"><?php the_excerpt(); ?></div>
+                        <div class="qa-doctor-button">
+                            <a href="#" class="qa-doctor-cta">Bác sĩ tư vấn</a>
+                        </div>
+                    </div>
+                <?php
+                    $i++;
+                endwhile;
+                wp_reset_postdata(); ?>
+            </div>
+    
+            <?php if ($i > 4): ?>
+                <div class="qa-doctor-toggle text-center mt-3">
+                    <button class="qa-doctor-toggle-btn">Xem thêm</button>
+                </div>
+            <?php endif; ?>
+        </div>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const toggleBtn = document.querySelector('.qa-doctor-toggle-btn');
+                const hiddenCards = document.querySelectorAll('.qa-doctor-hidden');
+                let expanded = false;
+    
+                toggleBtn?.addEventListener('click', function () {
+                    hiddenCards.forEach(card => card.classList.toggle('qa-doctor-visible'));
+                    expanded = !expanded;
+                    toggleBtn.textContent = expanded ? 'Thu gọn' : 'Xem thêm';
+                });
+            });
+        </script>
+    
+        <?php
         return ob_get_clean();
     }        
     private function get_translated_page_id_by_slug($slug) {
