@@ -12,6 +12,7 @@
 
         <!-- Form câu hỏi -->
         <div class="qa-col qa-main-form">
+            <?php echo do_shortcode('[nex2tek_qa_doctor_statistic]'); ?>
             <div class="qa-form-wrapper">
                <?php if ($query->have_posts()) : ?>
                 <div class="qa-list list-unstyled">
