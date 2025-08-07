@@ -1,16 +1,32 @@
 <?php
-/** @var WP_Query $query */
-/** @var int $paged */
+
+if (!defined('ABSPATH')) exit;
+$current_lang = pll_current_language();
+$paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
+
+$query = new WP_Query([
+    'post_type'      => 'question',
+    'post_status'    => 'publish',
+    'posts_per_page' => 12,
+    'paged'          => $paged,
+    'tax_query'      => [
+        [
+            'taxonomy' => 'language',
+            'field'    => 'slug',
+            'terms'    => $current_lang,
+        ],
+    ],
+]);
 ?>
 
 <div class="qa-container">
     <div class="qa-row">
-        <!-- Sidebar chuyên mục -->
+        <!-- Sidebar Left -->
         <div class="qa-col qa-sidebar-left">
             <?php echo do_shortcode('[nex2tek_qa_question_category]'); ?>
         </div>
 
-        <!-- Form câu hỏi -->
+        <!-- Form Question -->
         <div class="qa-col qa-main-form">
             <?php echo do_shortcode('[nex2tek_qa_doctor_statistic]'); ?>
             <div class="qa-form-wrapper">
@@ -53,7 +69,7 @@
             </div>
         </div>
 
-        <!-- Sidebar thống kê -->
+        <!-- Sidebar right -->
         <div class="qa-col qa-sidebar-right">
             <?php echo do_shortcode('[nex2tek_qa_question_statistic]'); ?>
         </div>
