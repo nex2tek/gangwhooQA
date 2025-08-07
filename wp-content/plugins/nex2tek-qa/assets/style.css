@@ -126,6 +126,10 @@
     padding: 5px;
 }
 
+.qa-category-list ul li {
+    margin-bottom: 5px;
+}
+
 .qa-category-list ul li a {
     display: block;
     font-size: 16px;
@@ -137,7 +141,8 @@
     font-weight: 400;
 }
 
-.qa-category-list ul li:hover {
+.qa-category-list ul li:hover,
+.qa-category-list ul li.qa-active {
     background-color: #ddd;
     border-radius: 5px;
 }
