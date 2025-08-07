@@ -33,7 +33,7 @@ $query = new WP_Query([
                <div class="qa-cat-description">
                    <?php echo $term->description; ?>
                     <p class="text-center">
-                       <?php _e('Có', 'nex2tek-qa'); ?> <span><?php echo $query->found_posts; ?></span>  <?php _e('câu hỏi cho chủ đề này', 'nex2tek-qa'); ?>
+                       <?php __('Có', 'nex2tek-qa'); ?> <span><?php echo $query->found_posts; ?></span>  <?php __('câu hỏi cho chủ đề này', 'nex2tek-qa'); ?>
                     </p>
 
                </div>
@@ -51,7 +51,7 @@ $query = new WP_Query([
                             <div class="description mb-2"><?php the_excerpt(); ?></div>
                             <div class="text-muted mb-2">
                                 <small class="text-primary">
-                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
+                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php __('lượt xem', 'nex2tek-qa'); ?>)
                                 </small>
                             </div>
                             
@@ -79,7 +79,8 @@ $query = new WP_Query([
 
         <!-- Sidebar thống kê -->
         <div class="qa-col qa-sidebar-right">
-            <?php echo do_shortcode('[nex2tek_qa_question_statistic]'); ?>
+            <?php echo do_shortcode('[nex2tek_qa_question_view]'); ?>
+            <?php echo do_shortcode('[nex2tek_qa_question_comment]'); ?>
         </div>
     </div>
 </div>

@@ -238,3 +238,18 @@
   height: 120px;
   width: 100%;
 }
+
+.qa-single .comment-form-comment{
+  display: flex;
+  flex-direction: column;
+}
+
+.qa-single #commentform .submit{
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  border-radius: 10px;
+}
+.qa-single #commentform .submit:hover{
+  opacity: .8;
+}

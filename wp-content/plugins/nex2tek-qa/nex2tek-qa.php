@@ -19,8 +19,9 @@ class Nex2Tek_QA {
         add_filter('template_include', array($this, 'override_templates'));
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
         add_shortcode('nex2tek_qa_question_category', array($this, 'qa_question_category_shortcode'));
-        add_shortcode('nex2tek_qa_question_statistic', array($this, 'qa_question_statistic_shortcode'));
-        add_shortcode('nex2tek_qa_doctor_statistic', array($this, 'qa_doctor_statistic_shortcode'));
+        add_shortcode('nex2tek_qa_question_view', array($this, 'qa_question_view_shortcode'));
+        add_shortcode('nex2tek_qa_question_comment', array($this, 'qa_question_comment_shortcode'));
+        add_shortcode('nex2tek_qa_doctor_list', array($this, 'qa_doctor_list_shortcode'));
         add_action('add_meta_boxes', array($this, 'add_doctor_title_meta_box'));
         add_action('save_post_doctor', array($this, 'save_doctor_meta'));
         add_action('pre_get_posts', array($this, 'custom_post_query_question_category'));
@@ -139,23 +140,6 @@ class Nex2Tek_QA {
 
     public function qa_list_shortcode() {
         ob_start();
-        $current_lang = pll_current_language();
-        $paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
-
-        $query = new WP_Query([
-            'post_type'      => 'question',
-            'post_status'    => 'publish',
-            'posts_per_page' => 12,
-            'paged'          => $paged,
-            'tax_query'      => [
-                [
-                    'taxonomy' => 'language',
-                    'field'    => 'slug',
-                    'terms'    => $current_lang,
-                ],
-            ],
-        ]);
-   
         $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-qa-list.php';
         if (file_exists($template_file)) {
             include $template_file;
@@ -177,184 +161,39 @@ class Nex2Tek_QA {
     
     public function qa_question_category_shortcode() {
         // Get the list of terms belonging to the 'question_category' taxonomy
-        $terms = get_terms([
-            'taxonomy' => 'question_category',
-            'hide_empty' => false,
-            'orderby' => 'name',
-            'order' => 'ASC',
-        ]);
-    
-        if (is_wp_error($terms) || empty($terms)) {
-            return ''; // Return an empty string if no terms are found
-        }
-    
         ob_start();
-        ?>
-    
-        <div class="qa-category-list p-3">
-            <h5>Chuyên mục</h5>
-            <ul class="list-unstyled mb-0">
-                <?php foreach ($terms as $term): ?>
-                    <li class="mb-2">
-                        <a href="<?php echo esc_url(get_term_link($term)); ?>" class="text-dark text-decoration-none">
-                            <?php echo esc_html($term->name); ?>
-                        </a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    
-        <?php
-        return ob_get_clean();
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-question-category.php';
+        if (file_exists($template_file)) {
+            include $template_file;
+        }
+        return ob_get_clean();  
     }
     
-    public function qa_question_statistic_shortcode() {
+    public function qa_question_view_shortcode() {
         ob_start();
-    
-        // --- Top viewed questions ---
-        $top_viewed_questions = new WP_Query([
-            'post_type'      => 'question',
-            'posts_per_page' => 5,
-            'post_status'    => 'publish',
-            'meta_key'       => 'view_count',
-            'orderby'        => 'meta_value_num',
-            'order'          => 'DESC',
-        ]);
-    
-        if ($top_viewed_questions->have_posts()):
-            ?>
-            <div class="qa-most-viewed">
-                <h5>Câu hỏi được xem nhiều nhất</h5>
-                <ol class="qa-most-viewed-list list-unstyled mb-0">
-                    <?php $i = 1; while ($top_viewed_questions->have_posts()): $top_viewed_questions->the_post(); ?>
-                        <li>
-                            <div class="qa-most-viewed-item">
-                                <?php echo $i++ . '. '; ?>
-                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                            </div>
-                            <div>
-                                <small class="qa-view-count">
-                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> lượt xem)
-                                </small>
-                            </div>
-                        </li>
-                    <?php endwhile; wp_reset_postdata(); ?>
-                </ol>
-            </div>
-            <?php
-        endif;
-    
-        // --- Top commented questions ---
-        global $wpdb;
-
-        $post_ids = $wpdb->get_col("
-            SELECT ID FROM {$wpdb->posts}
-            WHERE post_type = 'question'
-            AND post_status = 'publish'
-            AND comment_count > 0
-            ORDER BY comment_count DESC
-            LIMIT 5
-        ");
-
-        if (empty($post_ids)) return '';
-
-        $most_commented_questions = new WP_Query([
-            'post_type' => 'question',
-            'post__in' => $post_ids,
-            'orderby' => 'post__in',
-            'posts_per_page' => 5
-        ]);
-
-        if ($most_commented_questions->have_posts()):
-            ?>
-            <div class="qa-most-viewed">
-                <h5>Câu hỏi nhiều bình luận nhất</h5>
-                <ol class="qa-most-viewed-list list-unstyled mb-0">
-                    <?php $i = 1; while ($most_commented_questions->have_posts()): $most_commented_questions->the_post(); ?>
-                        <li>
-                            <div class="qa-most-viewed-item">
-                                <?php echo $i++ . '. '; ?>
-                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-                            </div>
-                            <div>
-                                <small class="qa-view-count">
-                                    (<?php echo get_comments_number(); ?> comment)
-                                </small>
-                            </div>
-                        </li>
-                    <?php endwhile; wp_reset_postdata(); ?>
-                </ol>
-            </div>
-            <?php
-        endif;
-    
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-question-view.php';
+        if (file_exists($template_file)) {
+            include $template_file;
+        }
         return ob_get_clean();
-    }     
-    
-    public function qa_doctor_statistic_shortcode() {
-        // Get all published doctors
-        $doctors = new WP_Query([
-            'post_type'      => 'doctor',
-            'posts_per_page' => 10,
-            'post_status'    => 'publish',
-        ]);
-    
-        if (!$doctors->have_posts()) {
-            return '';
+    } 
+
+    public function qa_question_comment_shortcode() {
+        ob_start();
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-question-comment.php';
+        if (file_exists($template_file)) {
+            include $template_file;
         }
     
-        ob_start(); ?>
-        
-        <div class="qa-doctor-grid-wrapper">
-            <div class="qa-doctor-grid">
-                <?php
-                $i = 0;
-                while ($doctors->have_posts()): $doctors->the_post();
-                    $hidden = $i >= 4 ? ' qa-doctor-hidden' : '';
-                    ?>
-                    <div class="qa-doctor-card<?php echo $hidden; ?>">
-                        <a href="<?php the_permalink(); ?>">
-                            <div class="qa-doctor-avatar">
-                                    <?php if (has_post_thumbnail()) {
-                                        the_post_thumbnail('medium');
-                                    } ?>
-                            </div>
-                            <p class="qa-doctor-title"><?php echo esc_html(get_post_meta(get_the_ID(), 'doctor_title', true)); ?></p>
-                            <h4 class="qa-doctor-name"><?php the_title(); ?></h4>
-                        </a>
-                        <div class="qa-doctor-desc"><?php the_excerpt(); ?></div>
-                        <div class="qa-doctor-button">
-                            <a href="#" class="qa-doctor-cta">Bác sĩ tư vấn</a>
-                        </div>
-                    </div>
-                <?php
-                    $i++;
-                endwhile;
-                wp_reset_postdata(); ?>
-            </div>
+        return ob_get_clean();
+    }    
     
-            <?php if ($i > 4): ?>
-                <div class="qa-doctor-toggle text-center mt-3">
-                    <button class="qa-doctor-toggle-btn">Xem thêm</button>
-                </div>
-            <?php endif; ?>
-        </div>
-    
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const toggleBtn = document.querySelector('.qa-doctor-toggle-btn');
-                const hiddenCards = document.querySelectorAll('.qa-doctor-hidden');
-                let expanded = false;
-    
-                toggleBtn?.addEventListener('click', function () {
-                    hiddenCards.forEach(card => card.classList.toggle('qa-doctor-visible'));
-                    expanded = !expanded;
-                    toggleBtn.textContent = expanded ? 'Thu gọn' : 'Xem thêm';
-                });
-            });
-        </script>
-    
-        <?php
+    public function qa_doctor_list_shortcode() {
+        ob_start();
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-doctor-list.php';
+        if (file_exists($template_file)) {
+            include $template_file;
+        }
         return ob_get_clean();
     }        
     private function get_translated_page_id_by_slug($slug) {
