@@ -37,5 +37,6 @@ add_action('init', function () {
         pll_register_string('nex2tek_qa_question_most_comment_title', 'Câu hỏi bình luận nhiều nhất', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_comment', 'bình luận', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_reply','Trả lời', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_invalid_verify','Xác minh bảo mật không hợp lệ', 'Nex2tek QA');
     }
 });

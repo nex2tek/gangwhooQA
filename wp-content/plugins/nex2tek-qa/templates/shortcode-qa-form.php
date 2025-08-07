@@ -88,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
     }
 }
 ?>
-
 <div class="qa-container">
     <div class="qa-row">
         <!-- Sidebar left -->
