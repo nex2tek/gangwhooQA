@@ -1,10 +1,10 @@
 <?php
-$current_lang = pll_current_language();
+$current_lang = get_current_lang();
 
 // Get all published doctors
 $doctors = new WP_Query([
     'post_type'      => 'doctor',
-    'posts_per_page' => 10,
+    'posts_per_page' => -1,
     'post_status'    => 'publish',
     'tax_query'      => [
         [
@@ -39,7 +39,7 @@ if (!$doctors->have_posts()) {
               </a>
               <div class="qa-doctor-desc"><?php the_excerpt(); ?></div>
               <div class="qa-doctor-button">
-                  <a href="#" class="qa-doctor-cta"><?php nex2tek_echo('Bác sĩ tư vấn','nex2tek-qa'); ?></a>
+                  <a href="<?php the_permalink(); ?>" class="qa-doctor-cta"><?php nex2tek_echo('Bác sĩ tư vấn','nex2tek-qa'); ?></a>
               </div>
           </div>
       <?php

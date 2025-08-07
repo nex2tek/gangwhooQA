@@ -1,34 +1,23 @@
 <?php get_header(); ?>
 
-<main class="single-doctor">
-    <h1><?php the_title(); ?></h1>
-    <div class="doctor-content"><?php the_content(); ?></div>
+<div class="qa-container container mt-4">
+    <div class="qa-doctor-details-profile">
+        <?php nex2tek_breadcrumb(); ?>
 
-    <hr>
+        <div class="qa-doctor-details-card">
+            <div class="qa-doctor-details-image">
+                <?php the_post_thumbnail('medium'); ?>
+            </div>
+            <div class="qa-doctor-details-info">
+                <h3 class="qa-doctor-title"><?php echo esc_html(get_post_meta(get_the_ID(), 'doctor_title', true)); ?></h3>
+                <h2><?php the_title(); ?></h2>
 
-    <h2><?php _e('Các câu hỏi đã được giao:', 'nex2tek-qa'); ?></h2>
-
-    <ul class="doctor-questions">
-        <?php
-        $doctor_id = get_the_ID();
-        $questions = new WP_Query([
-            'post_type'  => 'question',
-            'meta_key'   => '_select_doctor',
-            'meta_value' => $doctor_id,
-            'post_status' => 'publish',
-            'posts_per_page' => -1,
-        ]);
-
-        if ($questions->have_posts()) :
-            while ($questions->have_posts()) : $questions->the_post();
-                echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
-            endwhile;
-            wp_reset_postdata();
-        else :
-            echo '<li>' . __('Chưa có câu hỏi nào.', 'nex2tek-qa') . '</li>';
-        endif;
-        ?>
-    </ul>
-</main>
+                <div class="qa-doctor-details-desc">
+                    <?php the_content(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php get_footer(); ?>
