@@ -1,14 +1,23 @@
 <?php
-  $top_viewed_questions = new WP_Query([
-      'post_type'      => 'question',
-      'posts_per_page' => 5,
-      'post_status'    => 'publish',
-      'meta_key'       => 'view_count',
-      'orderby'        => 'meta_value_num',
-      'order'          => 'DESC',
-  ]);
+    $current_lang = pll_current_language();
 
-  if ($top_viewed_questions->have_posts()):
+    $top_viewed_questions = new WP_Query([
+        'post_type'      => 'question',
+        'posts_per_page' => 5,
+        'post_status'    => 'publish',
+        'meta_key'       => 'view_count',
+        'orderby'        => 'meta_value_num',
+        'order'          => 'DESC',
+        'tax_query'      => [
+            [
+                'taxonomy' => 'language',
+                'field'    => 'slug',
+                'terms'    => $current_lang,
+            ],
+        ],
+    ]);
+
+    if ($top_viewed_questions->have_posts()):
 ?>
 
 <div class="qa-most-viewed">

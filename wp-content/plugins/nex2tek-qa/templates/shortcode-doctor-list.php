@@ -1,9 +1,18 @@
 <?php
+$current_lang = pll_current_language();
+
 // Get all published doctors
 $doctors = new WP_Query([
     'post_type'      => 'doctor',
     'posts_per_page' => 10,
     'post_status'    => 'publish',
+    'tax_query'      => [
+        [
+            'taxonomy' => 'language',
+            'field'    => 'slug',
+            'terms'    => $current_lang,
+        ],
+    ],
 ]);
 
 if (!$doctors->have_posts()) {
@@ -41,7 +50,8 @@ if (!$doctors->have_posts()) {
 
   <?php if ($i > 4): ?>
       <div class="qa-doctor-toggle text-center mt-3">
-          <button class="qa-doctor-toggle-btn"><?php _e('Xem thêm','nex2tek-qa'); ?></button>
+          <button class="qa-doctor-toggle-btn" data-expanded-text="<?php _e('Thu gọn', 'nex2tek-qa'); ?>" 
+          data-collapsed-text="<?php _e('Xem thêm', 'nex2tek-qa'); ?>"><?php _e('Xem thêm','nex2tek-qa'); ?></button>
       </div>
   <?php endif; ?>
 </div>
@@ -55,7 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleBtn?.addEventListener('click', function () {
         hiddenCards.forEach(card => card.classList.toggle('qa-doctor-visible'));
         expanded = !expanded;
-        toggleBtn.textContent = expanded ? <?php _e('Thu gọn','nex2tek-qa'); ?> : <?php _e('Xem thêm','nex2tek-qa'); ?>;
+
+        const expandedText = toggleBtn.dataset.expandedText;
+        const collapsedText = toggleBtn.dataset.collapsedText;
+
+        toggleBtn.textContent = expanded ? expandedText : collapsedText;
     });
 });
 </script>

@@ -1,10 +1,12 @@
 <?php
 if (!defined('ABSPATH')) exit; 
+$current_lang = pll_current_language();
 $terms = get_terms([
     'taxonomy' => 'question_category',
     'hide_empty' => false,
     'orderby' => 'name',
     'order' => 'ASC',
+    'lang'  => $current_lang
 ]);
 
 if (is_wp_error($terms) || empty($terms)) {

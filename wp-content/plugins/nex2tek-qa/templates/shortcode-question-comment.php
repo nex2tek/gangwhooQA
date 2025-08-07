@@ -1,6 +1,7 @@
 <?php
 
 global $wpdb;
+$current_lang = pll_current_language();
 
 $post_ids = $wpdb->get_col("
     SELECT ID FROM {$wpdb->posts}
@@ -17,7 +18,14 @@ $most_commented_questions = new WP_Query([
     'post_type' => 'question',
     'post__in' => $post_ids,
     'orderby' => 'post__in',
-    'posts_per_page' => 5
+    'posts_per_page' => 5,
+    'tax_query'      => [
+        [
+            'taxonomy' => 'language',
+            'field'    => 'slug',
+            'terms'    => $current_lang,
+        ],
+    ],
 ]);
 
 if ($most_commented_questions->have_posts()):
