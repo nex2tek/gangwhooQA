@@ -12,7 +12,7 @@
 ?>
 
 <div class="qa-most-viewed">
-    <h5><?php _e('Câu hỏi được xem nhiều nhất', 'nex2tek-qa'); ?></h5>
+    <h5><?php nex2tek_echo('Câu hỏi được xem nhiều nhất', 'nex2tek-qa'); ?></h5>
     <ol class="qa-most-viewed-list list-unstyled mb-0">
         <?php $i = 1; while ($top_viewed_questions->have_posts()): $top_viewed_questions->the_post(); ?>
             <li>
@@ -22,7 +22,7 @@
                 </div>
                 <div>
                     <small class="qa-view-count">
-                        (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php _e('lượt xem','nex2tek-qa'); ?>)
+                        (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem','nex2tek-qa'); ?>)
                     </small>
                 </div>
             </li>

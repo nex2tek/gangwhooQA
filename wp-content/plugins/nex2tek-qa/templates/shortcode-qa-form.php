@@ -65,23 +65,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
         <!-- Form question -->
         <div class="qa-col qa-main-form">
             <div class="qa-form-wrapper">
-                <h3><?php _e('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></h3>
-                <p><?php _e('Quý khách vui lòng điền đầy đủ thông tin bên dưới', 'nex2tek-qa'); ?></p>
+                <h3><?php nex2tek_echo('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></h3>
+                <p><?php nex2tek_echo('Quý khách vui lòng điền đầy đủ thông tin bên dưới', 'nex2tek-qa'); ?></p>
                 <?php if ($success): ?>
-                    <p class="qa-success qa-alert qa-alert-success"><?php _e('Câu hỏi của bạn đã được gửi thành công!', 'nex2tek-qa'); ?></p>
+                    <p class="qa-success qa-alert qa-alert-success"><?php nex2tek_echo('Câu hỏi của bạn đã được gửi thành công!', 'nex2tek-qa'); ?></p>
                 <?php elseif (!empty($error)): ?>
                     <p class="qa-error qa-alert qa-alert-error"><?php echo esc_html($error); ?></p>
                 <?php endif; ?>
 
                 <form method="post" class="qa-form">
                     <?php wp_nonce_field('qa_submit_form', 'qa_nonce'); ?>
-                    <textarea name="qa_question" id="qa_question" rows="4" required placeholder="<?php _e('Nội dung câu hỏi', 'nex2tek-qa'); ?>"></textarea>
+                    <textarea name="qa_question" id="qa_question" rows="4" required placeholder="<?php nex2tek_echo('Nội dung câu hỏi', 'nex2tek-qa'); ?>"></textarea>
                     <input type="text" name="qa_name" id="qa_name" placeholder="Tên của bạn*" required>
                     <input type="tel" name="qa_phone" id="qa_phone" placeholder="Điện thoại*" required>
                     <input type="email" name="qa_email" id="qa_email" placeholder="Email*" required>
 
                     <div class="text-center mt-4 btn-group">
-                        <button type="submit"><?php _e('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></button>
+                        <button type="submit"><?php nex2tek_echo('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></button>
                     </div>
                 </form>
             </div>

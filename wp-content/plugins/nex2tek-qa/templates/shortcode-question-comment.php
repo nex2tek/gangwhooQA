@@ -23,7 +23,7 @@ $most_commented_questions = new WP_Query([
 if ($most_commented_questions->have_posts()):
 ?>
 <div class="qa-most-viewed">
-    <h5><?php _e('Câu hỏi nhiều bình luận nhất', 'nex2tek-qa'); ?></h5>
+    <h5><?php nex2tek_echo('Câu hỏi nhiều bình luận nhất', 'nex2tek-qa'); ?></h5>
     <ol class="qa-most-viewed-list list-unstyled mb-0">
         <?php $i = 1; while ($most_commented_questions->have_posts()): $most_commented_questions->the_post(); ?>
             <li>
@@ -33,7 +33,7 @@ if ($most_commented_questions->have_posts()):
                 </div>
                 <div>
                     <small class="qa-view-count">
-                        (<?php echo get_comments_number(); ?> <?php _e('bình luận','nex2tek-qa'); ?>)
+                        (<?php echo get_comments_number(); ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?>)
                     </small>
                 </div>
             </li>

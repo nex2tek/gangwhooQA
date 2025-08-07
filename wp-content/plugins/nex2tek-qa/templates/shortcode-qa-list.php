@@ -1,7 +1,9 @@
 <?php
 
 if (!defined('ABSPATH')) exit;
-$current_lang = pll_current_language();
+
+$current_lang = get_current_lang();
+
 $paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
 
 $query = new WP_Query([
@@ -37,13 +39,13 @@ $query = new WP_Query([
                             <h3 class="fw-bold mb-2"> <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a></h3>
                             <div class="text-muted mb-2">
                                 <div class="text-primary d-flex align-items-center">    
-                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"> <span class="qa-name"> <?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: _e('Người ẩn danh', 'nex2tek-qa'); ?> </span>
+                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"> <span class="qa-name"> <?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: nex2tek_echo('Người ẩn danh', 'nex2tek-qa'); ?> </span>
                                 </div>
                             </div>
                             <div class="description mb-2"><?php the_excerpt(); ?></div>
                             <div class="text-muted mb-2">
                                 <small class="text-primary">
-                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php _e('lượt xem', 'nex2tek-qa'); ?>)
+                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?>)
                                 </small>
                             </div>
                             
@@ -63,7 +65,7 @@ $query = new WP_Query([
                   ?>
               </div>
           <?php else : ?>
-              <p class="text-muted"><?php _e('Không có câu hỏi nào.', 'nex2tek-qa'); ?></p>
+              <p class="text-muted"><?php nex2tek_echo('Không có câu hỏi nào.', 'nex2tek-qa'); ?></p>
           <?php endif; ?>
           <?php wp_reset_postdata(); ?>
             </div>

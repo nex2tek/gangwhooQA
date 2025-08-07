@@ -311,3 +311,4 @@ function increase_question_view_count($post_id) {
     update_post_meta($post_id, 'view_count', $views);
 }
 
+include_once plugin_dir_path(__FILE__) . 'nex2tek-translate.php';

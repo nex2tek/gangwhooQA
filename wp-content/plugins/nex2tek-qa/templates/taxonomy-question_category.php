@@ -33,9 +33,8 @@ $query = new WP_Query([
                <div class="qa-cat-description">
                    <?php echo $term->description; ?>
                     <p class="text-center">
-                       <?php __('Có', 'nex2tek-qa'); ?> <span><?php echo $query->found_posts; ?></span>  <?php __('câu hỏi cho chủ đề này', 'nex2tek-qa'); ?>
+                       <?php nex2tek_echo('Có', 'nex2tek-qa'); ?> <span><?php echo $query->found_posts; ?></span>  <?php nex2tek_echo('câu hỏi cho chủ đề này', 'nex2tek-qa'); ?>
                     </p>
-
                </div>
                <?php if ($query->have_posts()) : ?>
                 <div class="qa-list list-unstyled">
@@ -45,13 +44,13 @@ $query = new WP_Query([
                             
                             <div class="text-muted mb-2">
                                 <div class="text-primary d-flex align-items-center">    
-                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"><?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: 'Người ẩn danh'; ?>
+                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"><?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: nex2tek_echo('Người ản danh', 'nex2tek-qa') ; ?>
                                 </div>
                             </div>
                             <div class="description mb-2"><?php the_excerpt(); ?></div>
                             <div class="text-muted mb-2">
                                 <small class="text-primary">
-                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php __('lượt xem', 'nex2tek-qa'); ?>)
+                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?>)
                                 </small>
                             </div>
                             
@@ -71,7 +70,7 @@ $query = new WP_Query([
                   ?>
               </div>
           <?php else : ?>
-              <p class="text-muted"><?php _e('Không có câu hỏi nào.', 'nex2tek-qa'); ?></p>
+              <p class="text-muted"><?php nex2tek_echo('Không có câu hỏi nào.', 'nex2tek-qa'); ?></p>
           <?php endif; ?>
           <?php wp_reset_postdata(); ?>
             </div>
