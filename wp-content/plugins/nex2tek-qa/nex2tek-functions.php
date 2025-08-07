@@ -89,6 +89,7 @@ function nex2tek_qa_register_settings() {
     // Register settings
     register_setting('nex2tek_qa_settings_group', 'nex2tek_qa_sitekey');
     register_setting('nex2tek_qa_settings_group', 'nex2tek_qa_secretkey');
+    register_setting('nex2tek_qa_settings_group', 'nex2tek_qa_enable_captcha');
 
     // Add settings section
     add_settings_section(
@@ -115,6 +116,15 @@ function nex2tek_qa_register_settings() {
         'nex2tek-qa-settings',
         'nex2tek_qa_section'
     );
+
+    // Enable captcha field
+    add_settings_field(
+        'nex2tek_qa_enable_captcha',
+        __('Enable CAPTCHA', 'nex2tek-qa'),
+        'nex2tek_qa_enable_captcha_field_render',
+        'nex2tek-qa-settings',
+        'nex2tek_qa_section'
+    );
 }
 
 function nex2tek_qa_sitekey_field_render() {
@@ -125,6 +135,16 @@ function nex2tek_qa_sitekey_field_render() {
 function nex2tek_qa_secretkey_field_render() {
     $value = get_option('nex2tek_qa_secretkey', '');
     echo '<input type="text" name="nex2tek_qa_secretkey" value="' . esc_attr($value) . '" class="regular-text" />';
+}
+
+function nex2tek_qa_enable_captcha_field_render() {
+    $enabled = get_option('nex2tek_qa_enable_captcha', false);
+    ?>
+    <label>
+        <input type="checkbox" name="nex2tek_qa_enable_captcha" value="1" <?php checked(1, $enabled); ?> />
+        <?php _e('Enable Cloudflare Turnstile CAPTCHA', 'nex2tek-qa'); ?>
+    </label>
+    <?php
 }
 
 function nex2tek_breadcrumb() {

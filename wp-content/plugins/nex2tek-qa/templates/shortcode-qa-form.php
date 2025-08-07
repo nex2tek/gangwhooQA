@@ -2,6 +2,7 @@
 
 $success = false;
 $error   = '';
+$is_enabled_captcha = get_option('nex2tek_qa_enable_captcha', false);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
 
@@ -9,26 +10,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
     $turnstile_response = $_POST['cf-turnstile-response'] ?? '';
     $secret_key = get_option('nex2tek_qa_secretkey', '');
 
-    if (empty($turnstile_response)) {
-        $error = nex2tek_text('Xác minh bảo mật không hợp lệ', 'nex2tek-qa');
-    } else {
-        $verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-        $response = wp_remote_post($verify_url, [
-            'body' => [
-                'secret'   => $secret_key,
-                'response' => $turnstile_response,
-                'remoteip' => $_SERVER['REMOTE_ADDR'],
-            ],
-        ]);
-
-        if (is_wp_error($response)) {
-            $error = nex2tek_text('Không thể kết nối xác minh bảo mật.', 'nex2tek-qa');
+    if ($is_enabled_captcha) {
+        if (empty($turnstile_response)) {
+            $error = nex2tek_text('Xác minh bảo mật không hợp lệ', 'nex2tek-qa');
         } else {
-            $response_body = wp_remote_retrieve_body($response);
-            $result = json_decode($response_body, true);
-
-            if (empty($result['success'])) {
-                $error = nex2tek_text('Xác minh bảo mật thất bại. Vui lòng thử lại', 'nex2tek-qa');
+            $verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+            $response = wp_remote_post($verify_url, [
+                'body' => [
+                    'secret'   => $secret_key,
+                    'response' => $turnstile_response,
+                    'remoteip' => $_SERVER['REMOTE_ADDR'],
+                ],
+            ]);
+    
+            if (is_wp_error($response)) {
+                $error = nex2tek_text('Không thể kết nối xác minh bảo mật.', 'nex2tek-qa');
+            } else {
+                $response_body = wp_remote_retrieve_body($response);
+                $result = json_decode($response_body, true);
+    
+                if (empty($result['success'])) {
+                    $error = nex2tek_text('Xác minh bảo mật thất bại. Vui lòng thử lại', 'nex2tek-qa');
+                }
             }
         }
     }
@@ -112,8 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
                     <input type="text" name="qa_name" id="qa_name" placeholder="<?php nex2tek_echo('Tên của bạn', 'nex2tek-qa'); ?>*" required>
                     <input type="tel" name="qa_phone" id="qa_phone" placeholder="<?php nex2tek_echo('Số điện thoại', 'nex2tek-qa'); ?>*" required>
                     <input type="email" name="qa_email" id="qa_email" placeholder="<?php nex2tek_echo('Email', 'nex2tek-qa'); ?>*" required>
-                    <div class="cf-turnstile" data-sitekey="<?php echo get_option('nex2tek_qa_sitekey', ''); ?>"></div>
-                    <br>
+                    <?php if ($is_enabled_captcha): ?>
+                        <div class="cf-turnstile" data-sitekey="<?php echo get_option('nex2tek_qa_sitekey', ''); ?>"></div>
+                        <br>
+                    <?php endif; ?>                    
                     <div class="text-center mt-4 btn-group">
                         <button type="submit"><?php nex2tek_echo('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></button>
                     </div>
