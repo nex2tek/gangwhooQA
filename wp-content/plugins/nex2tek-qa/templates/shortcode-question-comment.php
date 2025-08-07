@@ -1,7 +1,7 @@
 <?php
 
 global $wpdb;
-$current_lang = pll_current_language();
+$current_lang = get_current_lang();
 
 $post_ids = $wpdb->get_col("
     SELECT ID FROM {$wpdb->posts}

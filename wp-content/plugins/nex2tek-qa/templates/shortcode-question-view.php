@@ -1,5 +1,5 @@
 <?php
-    $current_lang = pll_current_language();
+    $current_lang = get_current_lang();
 
     $top_viewed_questions = new WP_Query([
         'post_type'      => 'question',

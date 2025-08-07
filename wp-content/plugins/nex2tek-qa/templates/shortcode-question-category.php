@@ -1,6 +1,7 @@
 <?php
 if (!defined('ABSPATH')) exit; 
-$current_lang = pll_current_language();
+$current_lang = get_current_lang();
+
 $terms = get_terms([
     'taxonomy' => 'question_category',
     'hide_empty' => false,
