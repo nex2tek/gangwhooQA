@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
 }
 ?>
 <div class="qa-container">
+    <?php nex2tek_breadcrumb(); ?>
     <div class="qa-row">
         <!-- Sidebar left -->
         <div class="qa-col qa-sidebar-left">

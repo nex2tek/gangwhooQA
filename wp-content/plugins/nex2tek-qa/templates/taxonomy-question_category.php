@@ -20,6 +20,7 @@ $query = new WP_Query([
 ?>
 
 <div class="qa-container">
+    <?php nex2tek_breadcrumb(); ?>
     <div class="qa-row">
         <!-- Sidebar chuyên mục -->
         <div class="qa-col qa-sidebar-left">
