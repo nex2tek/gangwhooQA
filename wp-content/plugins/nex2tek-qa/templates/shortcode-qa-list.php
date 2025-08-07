@@ -43,12 +43,10 @@ $query = new WP_Query([
                                 </div>
                             </div>
                             <div class="description mb-2"><?php the_excerpt(); ?></div>
-                            <div class="text-muted mb-2">
-                                <small class="text-primary">
-                                    (<?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?>)
-                                </small>
+                            <div class="text-muted mb-2 question-icon-wrapper">
+                                <span class="question-icon comment-icon"></span>
+                                <span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?></span>
                             </div>
-                            
                         </div>
                     <?php endwhile; ?>
                 </div>

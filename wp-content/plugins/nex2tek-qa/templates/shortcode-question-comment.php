@@ -39,10 +39,9 @@ if ($most_commented_questions->have_posts()):
                     <?php echo $i++ . '. '; ?>
                     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                 </div>
-                <div>
-                    <small class="qa-view-count">
-                        (<?php echo get_comments_number(); ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?>)
-                    </small>
+                <div class="question-icon-wrapper">
+                    <span class="question-icon comment-icon"></span>
+                    <span><?php echo get_comments_number(); ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span>
                 </div>
             </li>
         <?php endwhile; wp_reset_postdata(); ?>
