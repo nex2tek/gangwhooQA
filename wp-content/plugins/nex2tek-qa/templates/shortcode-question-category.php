@@ -20,7 +20,7 @@ $current_slug = ($current_term && isset($current_term->slug)) ? $current_term->s
 
 ?>
 <div class="qa-category-list p-3">
-    <h5><?php _e('Chuyên Mục', 'nex2tek-qa'); ?></h5>
+    <h5><?php nex2tek_echo('Chuyên mục', 'nex2tek-qa'); ?></h5>
     <ul class="list-unstyled mb-0">
         <?php foreach ($terms as $term): ?>
             <?php
