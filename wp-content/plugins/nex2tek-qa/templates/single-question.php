@@ -1,9 +1,9 @@
 <?php get_header();
-    increase_question_view_count(get_the_ID());
-    $userName = get_post_meta(get_the_ID(), 'qa_name', true) ?: 'Người ẩn danh';
-    $viewCount = number_format((int) get_post_meta(get_the_ID(), 'view_count', true));
-    $createdDate = get_the_date('d/m/Y', get_the_ID());
-    $answer = get_post_meta(get_the_ID(), '_answer', true);
+increase_question_view_count(get_the_ID());
+$userName = get_post_meta(get_the_ID(), 'qa_name', true) ?: 'Người ẩn danh';
+$viewCount = number_format((int) get_post_meta(get_the_ID(), 'view_count', true));
+$createdDate = get_the_date('d/m/Y', get_the_ID());
+$answer = get_post_meta(get_the_ID(), '_answer', true);
 ?>
 
 <div class="qa-container container mt-4">
@@ -28,9 +28,9 @@
                         <h2 class="question_knhd_1_0_1__content">mình nâng mũi 8 ngày rồi có ăn rau ngót được không, nâng mũi có phải kiêng rau ngót không nhỉ</h2>
                         <div class="question_knhd_1_0_1__action">
                             <div>
-                                <a href="#wpd-threads" class="question_knhd_1_0_1__comment">
+                                <a href="#comment-section" class="question_knhd_1_0_1__comment">
                                     <span class="question_knhd_1_0_1__icon question_knhd_1_0_1__icon--1"></span>
-                                    <span>0 Bình luận</span>
+                                    <span><?= get_comments_number() ?> Bình luận</span>
                                 </a>
                                 <a href="#" class="question_knhd_1_0_1__view">
                                     <span class="question_knhd_1_0_1__icon question_knhd_1_0_1__icon--2"></span>
@@ -46,25 +46,17 @@
                             <?= $answer ?>
                         </div>
                         <div class="answer_knhd_1_0_0__action helpful-buttons" data-post-id="18458" data-user-vote="">
-                            <a href="#comments" class="answer_knhd_1_0_0__reply"><span class="answer_knhd_1_0_0__icon answer_knhd_1_0_0__icon--3"></span> Trả lời</a>
-                            <div>
-                                <button id="like-btn" class="answer_knhd_1_0_0__comment">
-                                    <span class="answer_knhd_1_0_0__icon answer_knhd_1_0_0__icon--1"></span>
-                                    <span>Hữu ích <span id="like-count">(1)</span></span>
-                                </button>
-                                <button id="unlike-btn" class="answer_knhd_1_0_0__view">
-                                    <span class="answer_knhd_1_0_0__icon answer_knhd_1_0_0__icon--2"></span>
-                                    <span>Không hữu ích <span id="unlike-count">(0)</span></span>
-                                </button>
-                            </div>
+                            <a href="#comment-section" class="answer_knhd_1_0_0__reply"><span class="answer_knhd_1_0_0__icon answer_knhd_1_0_0__icon--3"></span> Trả lời</a>
                         </div>
                     </article>
                 </section>
-                <?php
-                if (comments_open() || get_comments_number()) {
-                    comments_template();
-                }
-                ?>
+                <div id="comment-section">
+                    <?php
+                    if (comments_open() || get_comments_number()) {
+                        comments_template();
+                    }
+                    ?>
+                </div>
             </main>
         </div>
         <div class="qa-col qa-sidebar-right">
