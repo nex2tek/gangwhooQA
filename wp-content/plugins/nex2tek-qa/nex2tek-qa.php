@@ -231,12 +231,14 @@ class Nex2Tek_QA {
    
     
     public function qa_question_category_shortcode() {
+        $current_lang = pll_current_language();
         // Get the list of terms belonging to the 'question_category' taxonomy
         $terms = get_terms([
             'taxonomy' => 'question_category',
             'hide_empty' => false,
             'orderby' => 'name',
             'order' => 'ASC',
+            'lang'       => $current_lang
         ]);
     
         if (is_wp_error($terms) || empty($terms)) {
@@ -265,6 +267,7 @@ class Nex2Tek_QA {
     
     public function qa_question_statistic_shortcode() {
         ob_start();
+        $current_lang = pll_current_language();
     
         // --- Top viewed questions ---
         $top_viewed_questions = new WP_Query([
@@ -274,6 +277,13 @@ class Nex2Tek_QA {
             'meta_key'       => 'view_count',
             'orderby'        => 'meta_value_num',
             'order'          => 'DESC',
+            'tax_query'      => [
+                [
+                    'taxonomy' => 'language',
+                    'field'    => 'slug',
+                    'terms'    => $current_lang,
+                ],
+            ],
         ]);
     
         if ($top_viewed_questions->have_posts()):
@@ -317,7 +327,14 @@ class Nex2Tek_QA {
             'post_type' => 'question',
             'post__in' => $post_ids,
             'orderby' => 'post__in',
-            'posts_per_page' => 5
+            'posts_per_page' => 5,
+            'tax_query'      => [
+                [
+                    'taxonomy' => 'language',
+                    'field'    => 'slug',
+                    'terms'    => $current_lang,
+                ],
+            ],
         ]);
 
         if ($most_commented_questions->have_posts()):
@@ -347,11 +364,19 @@ class Nex2Tek_QA {
     }     
     
     public function qa_doctor_statistic_shortcode() {
+        $current_lang = pll_current_language();
         // Get all published doctors
         $doctors = new WP_Query([
             'post_type'      => 'doctor',
             'posts_per_page' => 10,
             'post_status'    => 'publish',
+            'tax_query'      => [
+                [
+                    'taxonomy' => 'language',
+                    'field'    => 'slug',
+                    'terms'    => $current_lang,
+                ],
+            ],
         ]);
     
         if (!$doctors->have_posts()) {
