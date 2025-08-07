@@ -70,7 +70,7 @@ $query = new WP_Query([
                   ?>
               </div>
           <?php else : ?>
-              <p class="text-muted"><?php nex2tek_echo('Không có câu hỏi nào.', 'nex2tek-qa'); ?></p>
+              <p class="text-muted"><?php nex2tek_echo('Không có câu hỏi nào', 'nex2tek-qa'); ?>.</p>
           <?php endif; ?>
           <?php wp_reset_postdata(); ?>
             </div>
