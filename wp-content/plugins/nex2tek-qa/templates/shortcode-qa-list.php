@@ -73,8 +73,10 @@ $query = new WP_Query([
 
         <!-- Sidebar right -->
         <div class="qa-col qa-sidebar-right">
+            <?php echo do_shortcode('[nex2tek_qa_button_create_question]'); ?>
             <?php echo do_shortcode('[nex2tek_qa_question_view]'); ?>
             <?php echo do_shortcode('[nex2tek_qa_question_comment]'); ?>
+            
         </div>
     </div>
 </div>

@@ -22,6 +22,7 @@ class Nex2Tek_QA {
         add_shortcode('nex2tek_qa_question_view', array($this, 'qa_question_view_shortcode'));
         add_shortcode('nex2tek_qa_question_comment', array($this, 'qa_question_comment_shortcode'));
         add_shortcode('nex2tek_qa_doctor_list', array($this, 'qa_doctor_list_shortcode'));
+        add_shortcode('nex2tek_qa_button_create_question', array($this, 'qa_button_create_question_shortcode'));
         add_action('add_meta_boxes', array($this, 'add_doctor_title_meta_box'));
         add_action('save_post_doctor', array($this, 'save_doctor_meta'));
         add_action('pre_get_posts', array($this, 'custom_post_query_question_category'));
@@ -105,16 +106,16 @@ class Nex2Tek_QA {
         $selected_doctor = get_post_meta($post->ID, '_select_doctor', true);
         $answer = get_post_meta($post->ID, '_answer', true);
 
-        echo '<p><label>' . __('Chọn bác sĩ:', 'nex2tek-qa') . '</label><br>';
+        echo '<p><label>' . nex2tek_text('Chọn bác sĩ', 'nex2tek-qa') . ':</label><br>';
         echo '<select name="select_doctor">';
-        echo '<option value="">' . __('-- Chọn bác sĩ --', 'nex2tek-qa') . '</option>';
+        echo '<option value="">--' . nex2tek_text('Chọn bác sĩ', 'nex2tek-qa') . '--</option>';
         foreach ($doctors as $doctor) {
             $selected = ($selected_doctor == $doctor->ID) ? 'selected' : '';
             echo "<option value='{$doctor->ID}' $selected>{$doctor->post_title}</option>";
         }
         echo '</select></p>';
 
-        echo '<p><label>' . __('Trả lời:', 'nex2tek-qa') . '</label></p>';
+        echo '<p><label>' . nex2tek_text('Trả lời', 'nex2tek-qa') . ':</label></p>';
         wp_editor($answer, 'answer', [
             'textarea_name' => 'answer',
             'textarea_rows' => 6,
@@ -196,7 +197,16 @@ class Nex2Tek_QA {
             include $template_file;
         }
         return ob_get_clean();
-    }        
+    } 
+    
+    public function qa_button_create_question_shortcode() {
+        ob_start();
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-button-create-question.php';
+        if (file_exists($template_file)) {
+            include $template_file;
+        }
+        return ob_get_clean();
+    }
     private function get_translated_page_id_by_slug($slug) {
         $page = get_page_by_path($slug);
         if (!$page) return false;
