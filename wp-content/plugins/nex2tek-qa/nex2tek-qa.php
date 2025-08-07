@@ -27,7 +27,7 @@ class Nex2Tek_QA {
     }
 
     public function register_post_types() {
-        // Câu hỏi
+        // Q&A
         register_post_type('question', [
             'label' => __('Câu hỏi', 'nex2tek-qa'),
             'public' => true,
@@ -44,7 +44,7 @@ class Nex2Tek_QA {
             'supports' => ['title', 'editor', 'custom-fields', 'comments','thumbnail'],
         ]);
 
-        // Bác sĩ
+        // Doctor
         register_post_type('doctor', [
             'label' => __('Bác sĩ', 'nex2tek-qa'),
             'public' => true,
@@ -57,7 +57,7 @@ class Nex2Tek_QA {
             'supports' => ['title', 'editor', 'custom-fields','thumbnail', 'excerpt'],
         ]);
 
-        // Taxonomy: Chuyên mục
+        // Taxonomy
       register_taxonomy('question_category', 'question', [
             'label' => __('Chuyên mục câu hỏi', 'nex2tek-qa'),
             'public' => true,
@@ -166,66 +166,11 @@ class Nex2Tek_QA {
 
     public function qa_form_shortcode() {
         ob_start();
-
-        $success = false;
-        $error = '';
-
-        if (
-            $_SERVER['REQUEST_METHOD'] === 'POST' &&
-            !empty($_POST['qa_question']) &&
-            isset($_POST['qa_nonce']) &&
-            wp_verify_nonce($_POST['qa_nonce'], 'qa_submit_form')
-        ) {
-            $question_content = sanitize_textarea_field($_POST['qa_question']);
-            $name  = sanitize_text_field($_POST['qa_name']);
-            $phone = sanitize_text_field($_POST['qa_phone']);
-            $email = sanitize_email($_POST['qa_email']);
-
-            $meta_data = [
-                'qa_name'  => $name,
-                'qa_phone' => $phone,
-                'qa_email' => $email,
-            ];
-
-            // Check if similar question already exists (by content + email)
-            $existing = get_posts([
-                'post_type'   => 'question',
-                'post_status' => 'pending',
-                's'           => $question_content,
-                'meta_query'  => [
-                    [
-                        'key'     => 'qa_email',
-                        'value'   => $email,
-                        'compare' => '='
-                    ]
-                ],
-                'numberposts' => 1,
-                'fields'      => 'ids',
-            ]);
-           
-            if (empty($existing)) {
-                $post_id = wp_insert_post([
-                    'post_type'    => 'question',
-                    'post_title'   => wp_trim_words($question_content, 10),
-                    'post_content' => $question_content,
-                    'post_status'  => 'pending',
-                    'meta_input'   => $meta_data,
-                ]);
-
-                if ($post_id) {
-                    $success = true;
-                } else {
-                    $error = __('Gửi câu hỏi thất bại. Vui lòng thử lại sau.', 'nex2tek-qa');
-                }
-            }
-        }
-
         // Load form template
         $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-qa-form.php';
         if (file_exists($template_file)) {
             include $template_file;
         }
-
         return ob_get_clean();
     }
    
@@ -464,8 +409,7 @@ class Nex2Tek_QA {
         wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], '1.0.0', true);
     }
 
-   
-   
+
 }
 
 new Nex2Tek_QA();

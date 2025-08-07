@@ -198,11 +198,11 @@
 }
 
 .question_knhd_1_0_1__icon--1 {
-  background-image: url(/wp-content/plugins/nex2tek-qa/assets/images/icon-comment.svg);
+  background-image: url(../assets/images/icon-comment.svg);
 }
 
 .question_knhd_1_0_1__icon--2 {
-  background-image: url(/wp-content/plugins/nex2tek-qa/assets/images/icon-eye.svg);
+  background-image: url(../assets/images/icon-eye.svg);
 }
 
 .question_knhd_1_0_1__comment:hover .question_knhd_1_0_1__icon,
@@ -211,25 +211,25 @@
 }
 
 .answer_knhd_1_0_0__icon--1 {
-  background-image: url(/wp-content/plugins/nex2tek-qa/assets/images/icon-like.svg);
+  background-image: url(../assets/images/icon-like.svg);
 }
 
 .answer_knhd_1_0_0__comment:hover .answer_knhd_1_0_0__icon--1,
 .answer_knhd_1_0_0__view:hover .answer_knhd_1_0_0__icon--1 {
-  background-image: url(/wp-content/plugins/nex2tek-qa/assets/images/icon-liked.svg) !important;
+  background-image: url(../assets/images/icon-liked.svg) !important;
 }
 
 .answer_knhd_1_0_0__icon--2 {
-  background-image: url(/wp-content/plugins/nex2tek-qa/assets/images/icon-dislike.svg);
+  background-image: url(../assets/images/icon-dislike.svg);
 }
 
 .answer_knhd_1_0_0__comment:hover .answer_knhd_1_0_0__icon--2,
 .answer_knhd_1_0_0__view:hover .answer_knhd_1_0_0__icon--2 {
-  background-image: url(/wp-content/plugins/nex2tek-qa/assets/images/icon-disliked.svg);
+  background-image: url(../assets/images/icon-disliked.svg);
 }
 
 .answer_knhd_1_0_0__icon--3 {
-  background-image: url(/wp-content/plugins/nex2tek-qa/assets/images/icon-reply.svg);
+  background-image: url(../assets/images/icon-reply.svg);
 }
 
 .post_comment .comment-respond form > p #comment {

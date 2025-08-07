@@ -1,13 +1,68 @@
-<?php if (!defined('ABSPATH')) exit; ?>
+<?php if (!defined('ABSPATH')) exit; 
+
+$success = false;
+$error   = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
+    //Check nonce
+    if (!isset($_POST['qa_nonce']) || !wp_verify_nonce($_POST['qa_nonce'], 'qa_submit_form')) {
+        $error = __('Token không hợp lệ hoặc đã hết hạn.', 'nex2tek-qa');
+    } else {
+        //Sanitize input
+        $question_content = sanitize_textarea_field($_POST['qa_question']);
+        $name  = sanitize_text_field($_POST['qa_name']);
+        $phone = sanitize_text_field($_POST['qa_phone']);
+        $email = sanitize_email($_POST['qa_email']);
+
+        $meta_data = [
+            'qa_name'  => $name,
+            'qa_phone' => $phone,
+            'qa_email' => $email,
+        ];
+
+        // Step 3: Check duplicate question
+        $duplicate = get_posts([
+            'post_type'   => 'question',
+            'post_status' => 'pending',
+            's'           => $question_content,
+            'meta_query'  => [[
+                'key'   => 'qa_email',
+                'value' => $email,
+            ]],
+            'numberposts' => 1,
+            'fields'      => 'ids',
+        ]);
+
+        if ($duplicate) {
+            $error = __('Câu hỏi tương tự đang chờ duyệt.', 'nex2tek-qa');
+        } else {
+            //Insert question post
+            $post_id = wp_insert_post([
+                'post_type'    => 'question',
+                'post_title'   => wp_trim_words($question_content, 10, '...'),
+                'post_content' => $question_content,
+                'post_status'  => 'pending',
+                'meta_input'   => $meta_data,
+            ]);
+
+            if ($post_id) {
+                $success = true;
+            } else {
+                $error = __('Gửi câu hỏi thất bại. Vui lòng thử lại sau.', 'nex2tek-qa');
+            }
+        }
+    }
+}
+?>
 
 <div class="qa-container">
     <div class="qa-row">
-        <!-- Sidebar chuyên mục -->
+        <!-- Sidebar left -->
         <div class="qa-col qa-sidebar-left">
             <?php echo do_shortcode('[nex2tek_qa_question_category]'); ?>
         </div>
 
-        <!-- Form câu hỏi -->
+        <!-- Form question -->
         <div class="qa-col qa-main-form">
             <div class="qa-form-wrapper">
                 <h3>ĐẶT CÂU HỎI</h3>
@@ -37,7 +92,7 @@
             <?php echo do_shortcode('[nex2tek_qa_doctor_statistic]'); ?>
         </div>
 
-        <!-- Sidebar thống kê -->
+        <!-- Sidebar right -->
         <div class="qa-col qa-sidebar-right">
             <?php echo do_shortcode('[nex2tek_qa_question_statistic]'); ?>
         </div>

@@ -25,7 +25,7 @@ $answer = get_post_meta(get_the_ID(), '_answer', true);
                             </div>
                             <div class="question_knhd_1_0_1__date">Đã hỏi: <span><?= $createdDate ?></span></div>
                         </div>
-                        <h2 class="question_knhd_1_0_1__content">mình nâng mũi 8 ngày rồi có ăn rau ngót được không, nâng mũi có phải kiêng rau ngót không nhỉ</h2>
+                        <h2 class="question_knhd_1_0_1__content"><?php the_content(); ?></h2>
                         <div class="question_knhd_1_0_1__action">
                             <div>
                                 <a href="#comment-section" class="question_knhd_1_0_1__comment">
