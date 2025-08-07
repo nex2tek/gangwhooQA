@@ -42,5 +42,8 @@ add_action('init', function () {
         pll_register_string('nex2tek_qa_question_topic','câu hỏi cho chủ đề này', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_choose_doctor','Chọn bác sĩ', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_question_category','Chuyên mục', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_create_question','Gửi câu hỏi', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_question_list','Hỏi đáp', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_home','Trang chủ', 'Nex2tek QA');
     }
 });

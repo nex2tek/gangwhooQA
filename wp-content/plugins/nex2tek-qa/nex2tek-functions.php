@@ -149,37 +149,26 @@ function nex2tek_qa_enable_captcha_field_render() {
 
 function nex2tek_breadcrumb() {
     echo '<div class="qa-breadcrumb">';
-    echo '<a href="' . home_url() . '">Trang chủ</a> &nbsp;&gt;&nbsp; ';
+    echo '<a href="' . home_url() . '">' . nex2tek_text('Trang chủ', 'nex2tek-qa') .'</a> &nbsp;&gt;&nbsp; ';
 
-    if (is_singular('doctor')) {
-        echo '<a href="' . site_url('/hoi-dap') . '">Hỏi đáp</a> &nbsp;&gt;&nbsp; ';
-        echo '<span>' . get_the_title() . '</span>';
-
-    } elseif (is_singular('question')) {
-        echo '<a href="' . site_url('/hoi-dap') . '">Hỏi đáp</a> &nbsp;&gt;&nbsp; ';
-
-        $terms = get_the_terms(get_the_ID(), 'question_category');
-        if (!empty($terms) && !is_wp_error($terms)) {
-            $term = $terms[0]; // lấy category đầu tiên
-            echo '<a href="' . get_term_link($term) . '">' . esc_html($term->name) . '</a> &nbsp;&gt;&nbsp; ';
-        }
-
-        echo '<span>' . get_the_title() . '</span>';
-
-    } elseif (is_post_type_archive('doctor')) {
-        echo '<a href="' . site_url('/hoi-dap') . '">Hỏi đáp</a> &nbsp;&gt;&nbsp; ';
-        echo '<span>Bác sĩ</span>';
-
-    } elseif (is_post_type_archive('question')) {
-        echo '<span>Hỏi đáp</span>';
-
-    } elseif (is_tax('question_category')) {
-        echo '<a href="' . site_url('/hoi-dap') . '">Hỏi đáp</a> &nbsp;&gt;&nbsp; ';
-        echo '<span>' . single_term_title('', false) . '</span>';
-
+    $is_page_question      = get_translated_page_id_by_slug('hoi-dap');
+    $page_qa_id = get_page_by_path('hoi-dap');
+    $page_qa_id = $page_qa_id ? $page_qa_id->ID : 0;
+    $link = function_exists('pll_get_post') ? get_permalink(pll_get_post($page_qa_id)) : get_permalink($page_qa_id);
+    
+    if ( (is_category() || is_tax() ) && !is_page($is_page_question) ) {
+        echo '<a href="' . $link . '">' . nex2tek_text('Hỏi đáp', 'nex2tek-qa') .'</a> &nbsp;&gt;&nbsp; ';
+        echo '<span>' . single_tag_title('', false) . '</span>';
     } else {
+        echo '<a href="' . $link . '">' . nex2tek_text('Hỏi đáp', 'nex2tek-qa') .'</a> &nbsp;&gt;&nbsp; ';
         echo '<span>' . get_the_title() . '</span>';
     }
 
     echo '</div>';
+}
+
+function get_translated_page_id_by_slug($slug) {
+    $page = get_page_by_path($slug);
+    if (!$page) return false;
+    return function_exists('pll_get_post') ? pll_get_post($page->ID) : $page->ID;
 }

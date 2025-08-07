@@ -7,6 +7,7 @@ $answer = get_post_meta(get_the_ID(), '_answer', true);
 ?>
 
 <div class="qa-container container mt-4">
+    <?php nex2tek_breadcrumb(); ?>
     <div class="qa-row row">
         <div class="qa-col qa-sidebar-left">
             <?php echo do_shortcode('[nex2tek_qa_question_category]'); ?>
