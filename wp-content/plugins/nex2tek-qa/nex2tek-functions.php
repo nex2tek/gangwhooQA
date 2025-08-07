@@ -1,38 +1,4 @@
 <?php
-// Hook create pages when plugin activated
-register_activation_hook(__FILE__, 'nex2tek_qa_create_pages');
-function nex2tek_qa_create_pages() {
-    $default_lang = function_exists('pll_default_language') ? pll_default_language() : 'vi';
-
-    if (!get_page_by_path('gui-cau-hoi')) {
-        $post_id = wp_insert_post([
-            'post_title'   => 'Gửi câu hỏi',
-            'post_name'    => 'gui-cau-hoi',
-            'post_content' => '[nex2tek_qa_form]',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-        ]);
-
-        if (function_exists('pll_set_post_language')) {
-            pll_set_post_language($post_id, $default_lang);
-        }
-    }
-    
-    if (!get_page_by_path('hoi-dap')) {
-        $post_id = wp_insert_post([
-            'post_title'   => 'Hỏi Đáp',
-            'post_name'    => 'hoi-dap',
-            'post_content' => '[nex2tek_qa_list]',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-        ]);
-
-        if (function_exists('pll_set_post_language')) {
-            pll_set_post_language($post_id, $default_lang);
-        }
-    }
-}
-
 // apply polylang support
 add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
     $post_types['question'] = 'question';
