@@ -25,6 +25,7 @@ class Nex2Tek_QA {
         add_action('add_meta_boxes', array($this, 'add_doctor_title_meta_box'));
         add_action('save_post_doctor', array($this, 'save_doctor_meta'));
         add_action('pre_get_posts', array($this, 'custom_post_query_question_category'));
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), [$this, 'add_settings_link']);
     }
 
     public function register_post_types() {
@@ -248,67 +249,14 @@ class Nex2Tek_QA {
         wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], '1.0.0', true);
     }
 
-
+    public function add_settings_link($links) {
+        $settings_link = '<a href="' . admin_url('options-general.php?page=nex2tek-qa-settings') . '">Settings</a>';
+        array_unshift($links, $settings_link);
+        return $links;
+    }
 }
 
 new Nex2Tek_QA();
 
-// Hook create pages when plugin activated
-register_activation_hook(__FILE__, 'nex2tek_qa_create_pages');
-function nex2tek_qa_create_pages() {
-    $default_lang = function_exists('pll_default_language') ? pll_default_language() : 'vi';
-
-    if (!get_page_by_path('gui-cau-hoi')) {
-        $post_id = wp_insert_post([
-            'post_title'   => 'Gửi câu hỏi',
-            'post_name'    => 'gui-cau-hoi',
-            'post_content' => '[nex2tek_qa_form]',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-        ]);
-
-        if (function_exists('pll_set_post_language')) {
-            pll_set_post_language($post_id, $default_lang);
-        }
-    }
-    
-    if (!get_page_by_path('hoi-dap')) {
-        $post_id = wp_insert_post([
-            'post_title'   => 'Hỏi Đáp',
-            'post_name'    => 'hoi-dap',
-            'post_content' => '[nex2tek_qa_list]',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-        ]);
-
-        if (function_exists('pll_set_post_language')) {
-            pll_set_post_language($post_id, $default_lang);
-        }
-    }
-}
-
-// apply polylang support
-add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
-    $post_types['question'] = 'question';
-    $post_types['doctor'] = 'doctor';
-
-    return $post_types;
-}, 10, 2);
-
-// apply polylang support
-add_filter('pll_get_taxonomies', function ($taxonomies, $is_translatable) {
-    if ($is_translatable) {
-        $taxonomies['question_category'] = 'question_category';
-    }
-    return $taxonomies;
-}, 10, 2);
-
-function increase_question_view_count($post_id) {
-    if (get_post_type($post_id) !== 'question') return;
-
-    $views = (int) get_post_meta($post_id, 'view_count', true);
-    $views++;
-    update_post_meta($post_id, 'view_count', $views);
-}
-
+include_once plugin_dir_path(__FILE__) . 'nex2tek-functions.php';
 include_once plugin_dir_path(__FILE__) . 'nex2tek-translate.php';
