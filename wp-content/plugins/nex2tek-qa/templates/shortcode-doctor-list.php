@@ -38,6 +38,8 @@ if (!$doctors->have_posts()) {
                   <div class="qa-doctor-avatar">
                         <?php if (has_post_thumbnail()) {
                             the_post_thumbnail('medium');
+                        } else { 
+                            echo '<img src="' . plugins_url('assets/images/avatar.png', __DIR__) . '" alt="avatar">'; 
                         } ?>
                   </div>
                   <p class="qa-doctor-title"><?php echo esc_html(get_post_meta(get_the_ID(), 'doctor_title', true)); ?></p>

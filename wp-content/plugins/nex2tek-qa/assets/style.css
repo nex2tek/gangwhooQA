@@ -218,7 +218,6 @@
 .qa-doctor-grid {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 .qa-doctor-card {
