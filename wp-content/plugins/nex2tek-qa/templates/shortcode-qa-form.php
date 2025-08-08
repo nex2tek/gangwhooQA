@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
                         <div class="cf-turnstile" data-sitekey="<?php echo get_option('nex2tek_qa_sitekey', ''); ?>"></div>
                         <br>
                     <?php endif; ?>                    
-                    <div class="text-center mt-4 btn-group">
+                    <div class="text-center">
                         <button type="submit"><?php nex2tek_echo('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></button>
                     </div>
                 </form>

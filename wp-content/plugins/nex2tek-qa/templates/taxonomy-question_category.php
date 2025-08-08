@@ -38,18 +38,18 @@ $query = new WP_Query([
                     </p>
                </div>
                <?php if ($query->have_posts()) : ?>
-                <div class="qa-list list-unstyled">
+                <div class="qa-list">
                     <?php while ($query->have_posts()) : $query->the_post();?>
-                        <div class="mb-4 border-bottom pb-3 qa-item">
-                            <h3 class="fw-bold mb-2"> <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none"><?php the_title(); ?></a></h3>
+                        <div class="qa-item">
+                            <h3> <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                             
-                            <div class="text-muted mb-2">
+                            <div>
                                 <div class="text-primary d-flex align-items-center">    
                                     <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"><?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: nex2tek_echo('Người ản danh', 'nex2tek-qa') ; ?>
                                 </div>
                             </div>
-                            <div class="description mb-2"><?php the_excerpt(); ?></div>
-                            <div class="text-muted mb-2 question-icon-wrapper">
+                            <div class="description"><?php the_excerpt(); ?></div>
+                            <div class="question-icon-wrapper">
                                 <span class="question-icon comment-icon"></span>
                                 <span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?></span>
                             </div>
@@ -58,7 +58,7 @@ $query = new WP_Query([
                 </div>
 
               <!-- Pagination -->
-              <div class="qa-pagination mt-4">
+              <div class="qa-pagination">
                   <?php
                   echo paginate_links([
                       'total'   => $query->max_num_pages,
@@ -69,7 +69,7 @@ $query = new WP_Query([
                   ?>
               </div>
           <?php else : ?>
-              <p class="text-muted"><?php nex2tek_echo('Không có câu hỏi nào', 'nex2tek-qa'); ?>.</p>
+              <p><?php nex2tek_echo('Không có câu hỏi nào', 'nex2tek-qa'); ?>.</p>
           <?php endif; ?>
           <?php wp_reset_postdata(); ?>
             </div>
