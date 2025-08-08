@@ -28,7 +28,7 @@
 ?>
 
 <div class="qa-most-viewed">
-    <h5><?php nex2tek_echo('Câu hỏi được xem nhiều nhất', 'nex2tek-qa'); ?></h5>
+    <div class="qa-most-viewed-title"><?php nex2tek_echo('Câu hỏi được xem nhiều nhất', 'nex2tek-qa'); ?></div>
     <ol class="qa-most-viewed-list">
         <?php $i = 1; while ($top_viewed_questions->have_posts()): $top_viewed_questions->the_post(); ?>
             <li>

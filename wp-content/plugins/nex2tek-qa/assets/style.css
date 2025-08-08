@@ -115,7 +115,7 @@
     margin-bottom: 15px;
 }
 
-.qa-category-list h5 {
+.qa-category-list .qa-category-title {
     font-weight: 600;
     font-size: 18px;
     padding: 0 10px 10px;
@@ -161,7 +161,7 @@
     border: 1px solid #eee;
 }
 
-.qa-most-viewed h5 {
+.qa-most-viewed .qa-most-viewed-title {
     font-weight: 600;
     font-size: 18px;
     padding: 0 10px 10px;
@@ -182,13 +182,14 @@
     padding-bottom: 7px;
     display: block;
     font-size: 16px;
-    color: #222;
     transition: all .25s linear;
     font-weight: 400;
+    color: #222!important;
 }
 
 .qa-most-viewed .qa-most-viewed-list li a {
     text-decoration: none;
+    color: #222!important;
 }
 
 .qa-most-viewed .qa-view-count {

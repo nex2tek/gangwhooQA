@@ -37,7 +37,7 @@
     if ($most_commented_questions->have_posts()):
 ?>
 <div class="qa-most-viewed">
-    <h5><?php nex2tek_echo('Câu hỏi nhiều bình luận nhất', 'nex2tek-qa'); ?></h5>
+    <div class="qa-most-viewed-title"><?php nex2tek_echo('Câu hỏi nhiều bình luận nhất', 'nex2tek-qa'); ?></div>
     <ol class="qa-most-viewed-list">
         <?php $i = 1; while ($most_commented_questions->have_posts()): $most_commented_questions->the_post(); ?>
             <li>
