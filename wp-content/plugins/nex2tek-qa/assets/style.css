@@ -1,5 +1,5 @@
 :root{
-    --primary: #0056d2;
+    --qa-primary: #0056d2;
 }
 .d-flex{
     display: flex;
@@ -116,7 +116,7 @@
     font-weight: 600;
     font-size: 18px;
     padding: 0 10px 10px;
-    color: var(--primary);
+    color: var(--qa-primary);
     border-bottom: 1px solid #ccc;
 }
 
@@ -162,7 +162,7 @@
     font-weight: 600;
     font-size: 18px;
     padding: 0 10px 10px;
-    color: var(--primary);
+    color: var(--qa-primary);
     border-bottom: 1px solid #ccc;
     text-align: center;
     margin: 0;
@@ -351,7 +351,7 @@
     text-decoration: none;
 }
 .qa-list h3 a:hover{
-    color: var(--primary);
+    color: var(--qa-primary);
 }
 .qa-avatar{
     border-radius: 50%;
@@ -398,8 +398,8 @@
 }
 
 .qa-pagination .current {
-  background-color:var(--primary);
-  border-color: var(--primary);
+  background-color:var(--qa-primary);
+  border-color: var(--qa-primary);
   color: #fff;
   font-weight: bold;
   cursor: default;
@@ -411,7 +411,7 @@
 
 .qa-cat-description p span{
     font-weight: bold;
-    color: var(--primary);
+    color: var(--qa-primary);
     font-size: 40px;
 }   
 
@@ -493,7 +493,7 @@
 .qa-breadcrumb {
     font-size: 14px;
     margin-bottom: 1rem;
-    color: var(--primary);
+    color: var(--qa-primary);
     font-weight: 400;
 }
 .qa-breadcrumb a {
@@ -536,7 +536,7 @@
 
 /* Start for right sidebar */
 .qa-most-viewed li:hover {
-    border-bottom: 2px solid var(--primary) !important;
+    border-bottom: 2px solid var(--qa-primary) !important;
 }
 
 .question-icon-wrapper {

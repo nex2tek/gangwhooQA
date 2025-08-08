@@ -245,8 +245,8 @@
 }
 
 .qa-single #commentform .submit{
-  background-color: var(--primary);
-  border-color: var(--primary);
+  background-color: var(--qa-primary);
+  border-color: var(--qa-primary);
   color: #fff;
   border-radius: 10px;
 }
