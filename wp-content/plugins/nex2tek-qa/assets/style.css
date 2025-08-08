@@ -11,6 +11,9 @@
 .text-center{
     text-align: center;
 }
+.text-decoration-none{
+    text-decoration: none;
+}
 /* Question Form */
 .qa-container {
     width: 100%;
@@ -569,4 +572,8 @@
 
 .question-icon-wrapper .comment-icon {
     background-image: url(../assets/images/icon-comment.svg);
+}
+
+.qa-lists{
+    padding: 20px;
 }

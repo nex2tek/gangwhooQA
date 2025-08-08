@@ -47,7 +47,9 @@
                 </div>
                 <div class="question-icon-wrapper">
                     <span class="question-icon comment-icon"></span>
-                    <span><?php echo get_comments_number(); ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span>
+                    <a href="<?php the_permalink(); ?>" class="text-decoration-none">
+                        <span><?php echo get_comments_number(); ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span>
+                    </a>
                 </div>
             </li>
         <?php endwhile; wp_reset_postdata(); ?>

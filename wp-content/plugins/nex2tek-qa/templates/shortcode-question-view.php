@@ -38,7 +38,9 @@
                 </div>
                 <div class="question-icon-wrapper">
                     <span class="question-icon eye-icon"></span>
-                    <span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem','nex2tek-qa'); ?></span>
+                    <a href="<?php the_permalink(); ?>" class="text-decoration-none">
+                        <span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem','nex2tek-qa'); ?></span>
+                    </a>
                 </div>
             </li>
         <?php endwhile; wp_reset_postdata(); ?>

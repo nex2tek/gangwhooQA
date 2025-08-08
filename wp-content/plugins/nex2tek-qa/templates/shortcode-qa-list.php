@@ -3,7 +3,6 @@
 if (!defined('ABSPATH')) exit;
 
 $current_lang = get_current_lang();
-
 $paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
 
 $args = [
@@ -38,7 +37,7 @@ $query = new WP_Query($args);
         <!-- Form Question -->
         <div class="qa-col qa-main-form">
             <?php echo do_shortcode('[nex2tek_qa_doctor_list]'); ?>
-            <div class="qa-form-wrapper">
+            <div class="qa-form-wrapper qa-lists">
                <?php if ($query->have_posts()) : ?>
                 <div class="qa-list">
                     <?php while ($query->have_posts()) : $query->the_post();?>
@@ -51,8 +50,12 @@ $query = new WP_Query($args);
                             </div>
                             <div class="description"><?php the_excerpt(); ?></div>
                             <div class="question-icon-wrapper">
+                                <span class="question-icon eye-icon"></span>
+                                <a href="<?php the_permalink(); ?>" class="text-decoration-none"><span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?> </span></a>
+                            </div>
+                            <div class="question-icon-wrapper">
                                 <span class="question-icon comment-icon"></span>
-                                <span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?></span>
+                                <a href="<?php the_permalink(); ?>" class="text-decoration-none"><span><?= get_comments_number() ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span></a>
                             </div>
                         </div>
                     <?php endwhile; ?>

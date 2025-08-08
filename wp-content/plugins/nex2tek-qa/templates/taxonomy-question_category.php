@@ -29,7 +29,7 @@ $query = new WP_Query([
 
         <!-- Form câu hỏi -->
         <div class="qa-col qa-main-form">
-            <div class="qa-form-wrapper">
+            <div class="qa-form-wrapper qa-lists">
                <h1 class="text-center"><?php single_term_title(); ?></h1>
                <div class="qa-cat-description">
                    <?php echo $term->description; ?>
@@ -50,8 +50,12 @@ $query = new WP_Query([
                             </div>
                             <div class="description"><?php the_excerpt(); ?></div>
                             <div class="question-icon-wrapper">
-                                <span class="question-icon comment-icon"></span>
+                                <span class="question-icon eye-icon"></span>
                                 <span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?></span>
+                            </div>
+                             <div class="question-icon-wrapper">
+                                <span class="question-icon comment-icon"></span>
+                                <span><span><?= get_comments_number() ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span></span>
                             </div>
                         </div>
                     <?php endwhile; ?>
