@@ -164,6 +164,7 @@ function nex2tek_verify_nonce(): bool {
  * create question
  */
 function nex2tek_insert_question(array $data) {
+    $question_title = sanitize_textarea_field($data['qa_title']);
     $question_content = sanitize_textarea_field($data['qa_question']);
     $meta_data = [
         'qa_name'  => sanitize_text_field($data['qa_name']),
@@ -173,7 +174,7 @@ function nex2tek_insert_question(array $data) {
 
     return wp_insert_post([
         'post_type'    => 'question',
-        'post_title'   => wp_trim_words($question_content, 10, '...'),
+        'post_title'   => $question_title ? $question_title : wp_trim_words($question_content, 10, '...'),
         'post_content' => $question_content,
         'post_status'  => 'pending',
         'meta_input'   => $meta_data,

@@ -16,7 +16,7 @@ function get_current_lang() {
 
 add_action('init', function () {
     if (function_exists('pll_register_string')) {
-        pll_register_string('nex2tek_qa_question_title', 'ĐẶT CÂU HỎI', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_question_title_form', 'ĐẶT CÂU HỎI', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_question_note', 'Quý khách vui lòng điền đầy đủ thông tin bên dưới', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_shortcode_question_view_title', 'Câu hỏi được xem nhiều nhất', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_view_text', 'lượt xem', 'Nex2tek QA');
@@ -46,5 +46,7 @@ add_action('init', function () {
         pll_register_string('nex2tek_qa_question_list','Hỏi đáp', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_home','Trang chủ', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_question_asked','Đã hỏi', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_question_title','Tiêu đề câu hỏi', 'Nex2tek QA');
+        
     }
 });

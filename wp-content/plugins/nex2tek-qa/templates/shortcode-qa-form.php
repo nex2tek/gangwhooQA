@@ -21,11 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
         $post_id = nex2tek_insert_question($_POST);
         if ($post_id) {
             $success = true;
+            // handle replace url avoid spam reload
+            echo '<script>
+                history.replaceState(null, "", "' . esc_url(get_permalink()) . '");
+            </script>';
         } else {
             $error = nex2tek_text('Gửi câu hỏi thất bại', 'nex2tek-qa');
         }
     }
 }
+
 ?>
 <div class="qa-container">
     <?php nex2tek_breadcrumb(); ?>
@@ -48,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
 
                 <form method="post" class="qa-form">
                     <?php wp_nonce_field('qa_submit_form', 'qa_nonce'); ?>
+                    <input type="text" name="qa_title" id="qa_title" placeholder="<?php nex2tek_echo('Tiêu đề câu hỏi', 'nex2tek-qa'); ?>*" required>
                     <textarea name="qa_question" id="qa_question" rows="4" required placeholder="<?php nex2tek_echo('Nội dung câu hỏi', 'nex2tek-qa'); ?>"></textarea>
                     <input type="text" name="qa_name" id="qa_name" placeholder="<?php nex2tek_echo('Tên của bạn', 'nex2tek-qa'); ?>*" required>
                     <input type="tel" name="qa_phone" id="qa_phone" placeholder="<?php nex2tek_echo('Số điện thoại', 'nex2tek-qa'); ?>*" required>
