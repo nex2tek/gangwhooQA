@@ -55,7 +55,7 @@ if (!$doctors->have_posts()) {
   </div>
 
   <?php if ($i > 4): ?>
-      <div class="qa-doctor-toggle text-center mt-3">
+      <div class="qa-doctor-toggle text-center">
           <button class="qa-doctor-toggle-btn" data-expanded-text="<?php nex2tek_echo('Thu gọn', 'nex2tek-qa'); ?>" 
           data-collapsed-text="<?php nex2tek_echo('Xem thêm', 'nex2tek-qa'); ?>"><?php nex2tek_echo('Xem thêm','nex2tek-qa'); ?></button>
       </div>

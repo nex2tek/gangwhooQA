@@ -19,15 +19,15 @@ $current_term = get_queried_object();
 $current_slug = ($current_term && isset($current_term->slug)) ? $current_term->slug : '';
 
 ?>
-<div class="qa-category-list p-3">
+<div class="qa-category-list">
     <h5><?php nex2tek_echo('Chuyên mục', 'nex2tek-qa'); ?></h5>
-    <ul class="list-unstyled mb-0">
+    <ul>
         <?php foreach ($terms as $term): ?>
             <?php
                 $is_active = $term->slug === $current_slug ? 'qa-active' : '';
             ?>
             <li class="mb-2 <?php echo esc_attr($is_active); ?>">
-                <a href="<?php echo esc_url(get_term_link($term)); ?>" class="text-dark text-decoration-none">
+                <a href="<?php echo esc_url(get_term_link($term)); ?>">
                     <?php echo esc_html($term->name); ?>
                 </a>
             </li>

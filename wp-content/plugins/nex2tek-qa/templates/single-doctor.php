@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<div class="qa-container container mt-4">
+<div class="qa-container">
     <div class="qa-doctor-details-profile">
         <?php nex2tek_breadcrumb(); ?>
 
