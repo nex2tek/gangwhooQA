@@ -129,6 +129,57 @@ function nex2tek_qa_enable_breadcrumb_field_render() {
     echo '<input type="checkbox" name="nex2tek_qa_enable_breadcrumb" value="1" ' . checked(1, $value, false) . ' />';
 }
 
+
+/**
+ * verify captcha
+ */
+function nex2tek_verify_turnstile($turnstile_response): bool {
+    $secret_key = get_option('nex2tek_qa_secretkey', '');
+
+    if (empty($turnstile_response)) return false;
+
+    $verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    $response = wp_remote_post($verify_url, [
+        'body' => [
+            'secret'   => $secret_key,
+            'response' => $turnstile_response,
+            'remoteip' => $_SERVER['REMOTE_ADDR'],
+        ],
+    ]);
+
+    if (is_wp_error($response)) return false;
+
+    $result = json_decode(wp_remote_retrieve_body($response), true);
+    return !empty($result['success']);
+}
+
+/**
+ * verify Nonce
+ */
+function nex2tek_verify_nonce(): bool {
+    return isset($_POST['qa_nonce']) && wp_verify_nonce($_POST['qa_nonce'], 'qa_submit_form');
+}
+
+/**
+ * create question
+ */
+function nex2tek_insert_question(array $data) {
+    $question_content = sanitize_textarea_field($data['qa_question']);
+    $meta_data = [
+        'qa_name'  => sanitize_text_field($data['qa_name']),
+        'qa_phone' => sanitize_text_field($data['qa_phone']),
+        'qa_email' => sanitize_email($data['qa_email']),
+    ];
+
+    return wp_insert_post([
+        'post_type'    => 'question',
+        'post_title'   => wp_trim_words($question_content, 10, '...'),
+        'post_content' => $question_content,
+        'post_status'  => 'pending',
+        'meta_input'   => $meta_data,
+    ]);
+}
+
 function nex2tek_breadcrumb() {
     if (!get_option('nex2tek_qa_enable_breadcrumb', 1)) {
         return;
