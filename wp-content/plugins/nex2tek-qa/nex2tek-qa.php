@@ -4,6 +4,7 @@ Plugin Name: Q&A Plugin
 Description: Plugin hỏi đáp bác sĩ cho WordPress. Hỗ trợ dịch với Polylang.
 Version: 1.0.0
 Author: Nex2Tek
+Author URI: https://nex2tek.com
 Text Domain: nex2tek-qa
 */
 

@@ -5,88 +5,24 @@ $error   = '';
 $is_enabled_captcha = get_option('nex2tek_qa_enable_captcha', false);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
-
-    // --- Step 1: Check Cloudflare Turnstile ---
     $turnstile_response = $_POST['cf-turnstile-response'] ?? '';
-    $secret_key = get_option('nex2tek_qa_secretkey', '');
-
-    if ($is_enabled_captcha) {
-        if (empty($turnstile_response)) {
-            $error = nex2tek_text('Xác minh bảo mật không hợp lệ', 'nex2tek-qa');
-        } else {
-            $verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-            $response = wp_remote_post($verify_url, [
-                'body' => [
-                    'secret'   => $secret_key,
-                    'response' => $turnstile_response,
-                    'remoteip' => $_SERVER['REMOTE_ADDR'],
-                ],
-            ]);
-    
-            if (is_wp_error($response)) {
-                $error = nex2tek_text('Không thể kết nối xác minh bảo mật.', 'nex2tek-qa');
-            } else {
-                $response_body = wp_remote_retrieve_body($response);
-                $result = json_decode($response_body, true);
-    
-                if (empty($result['success'])) {
-                    $error = nex2tek_text('Xác minh bảo mật thất bại. Vui lòng thử lại', 'nex2tek-qa');
-                }
-            }
-        }
+    // 1. verify Captcha
+    if ($is_enabled_captcha && !nex2tek_verify_turnstile($turnstile_response)) {
+        $error = nex2tek_text('Xác minh bảo mật thất bại. Vui lòng thử lại', 'nex2tek-qa');
     }
 
-    // --- Step 2: Check Nonce ---
-    if (empty($error)) {
-        if (!isset($_POST['qa_nonce']) || !wp_verify_nonce($_POST['qa_nonce'], 'qa_submit_form')) {
-            $error = nex2tek_text('Token không hợp lệ hoặc đã hết hạn', 'nex2tek-qa');
-        }
+    // 2. Check Nonce
+    if (empty($error) && !nex2tek_verify_nonce()) {
+        $error = nex2tek_text('Token không hợp lệ hoặc đã hết hạn', 'nex2tek-qa');
     }
 
-    // --- Step 3: Process data if there are no errors ---
+    // 3. Insert question
     if (empty($error)) {
-        // Sanitize inputs
-        $question_content = sanitize_textarea_field($_POST['qa_question']);
-        $name  = sanitize_text_field($_POST['qa_name']);
-        $phone = sanitize_text_field($_POST['qa_phone']);
-        $email = sanitize_email($_POST['qa_email']);
-
-        $meta_data = [
-            'qa_name'  => $name,
-            'qa_phone' => $phone,
-            'qa_email' => $email,
-        ];
-
-        // Step 4: Check duplicate questions
-        $duplicate = get_posts([
-            'post_type'   => 'question',
-            'post_status' => 'pending',
-            's'           => $question_content,
-            'meta_query'  => [[
-                'key'   => 'qa_email',
-                'value' => $email,
-            ]],
-            'numberposts' => 1,
-            'fields'      => 'ids',
-        ]);
-
-        if ($duplicate) {
-            $error = nex2tek_text('Câu hỏi tương tự đang chờ duyệt', 'nex2tek-qa');
+        $post_id = nex2tek_insert_question($_POST);
+        if ($post_id) {
+            $success = true;
         } else {
-            // Insert post
-            $post_id = wp_insert_post([
-                'post_type'    => 'question',
-                'post_title'   => wp_trim_words($question_content, 10, '...'),
-                'post_content' => $question_content,
-                'post_status'  => 'pending',
-                'meta_input'   => $meta_data,
-            ]);
-
-            if ($post_id) {
-                $success = true;
-            } else {
-                $error = nex2tek_text('Gửi câu hỏi thất bại', 'nex2tek-qa');
-            }
+            $error = nex2tek_text('Gửi câu hỏi thất bại', 'nex2tek-qa');
         }
     }
 }
