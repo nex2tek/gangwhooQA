@@ -46,7 +46,7 @@
                     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                 </div>
                 <div class="question-icon-wrapper">
-                    <span class="question-icon comment-icon"></span>
+                    <span class="question-icon"><i class="bi bi-chat-dots"></i></span>
                     <a href="<?php the_permalink(); ?>" class="text-decoration-none">
                         <span><?php echo get_comments_number(); ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span>
                     </a>

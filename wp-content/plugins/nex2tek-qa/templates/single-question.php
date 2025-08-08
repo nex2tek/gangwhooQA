@@ -30,11 +30,11 @@ $answer = get_post_meta(get_the_ID(), '_answer', true);
                         <div class="question_knhd_1_0_1__action">
                             <div>
                                 <a href="#comment-section" class="question_knhd_1_0_1__comment">
-                                    <span class="question_knhd_1_0_1__icon question_knhd_1_0_1__icon--1"></span>
+                                    <span class="question_knhd_1_0_1__icon"><i class="bi bi-chat-dots"></i></span>
                                     <span><?= get_comments_number() ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span>
                                 </a>
                                 <a href="#" class="question_knhd_1_0_1__view">
-                                    <span class="question_knhd_1_0_1__icon question_knhd_1_0_1__icon--2"></span>
+                                    <span class="question_knhd_1_0_1__icon"><i class="bi bi-eye"></i></span>
                                     <span><?= $viewCount ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?></span>
                                 </a>
                             </div>

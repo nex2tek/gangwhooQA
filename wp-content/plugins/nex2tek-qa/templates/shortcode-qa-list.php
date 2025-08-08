@@ -50,11 +50,11 @@ $query = new WP_Query($args);
                             </div>
                             <div class="description"><?php the_excerpt(); ?></div>
                             <div class="question-icon-wrapper">
-                                <span class="question-icon eye-icon"></span>
+                                <span class="question-icon"><i class="bi bi-eye"></i></span>
                                 <a href="<?php the_permalink(); ?>" class="text-decoration-none"><span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?> </span></a>
                             </div>
                             <div class="question-icon-wrapper">
-                                <span class="question-icon comment-icon"></span>
+                                <span class="question-icon"><i class="bi bi-chat-dots"></i></span>
                                 <a href="<?php the_permalink(); ?>" class="text-decoration-none"><span><?= get_comments_number() ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span></a>
                             </div>
                         </div>

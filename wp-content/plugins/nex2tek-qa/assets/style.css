@@ -38,7 +38,7 @@
 }
 
 .qa-main-form {
-    flex: 1 1 60%;
+    flex: 1 1 59%;
 }
 
 .qa-sidebar-right {
@@ -46,20 +46,10 @@
 }
 
 /* Responsive */
-@media (max-width: 992px) {
-    .qa-sidebar-left,
-    .qa-sidebar-right,
-    .qa-main-form {
-        flex: 0 0 100%;
-        order: unset;
-    }
-}
 
 .qa-form-wrapper {
     background: #fff;
     border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
     margin-bottom: 20px;
     font-size: 16px;
     box-sizing: border-box;
@@ -240,20 +230,6 @@
     text-decoration: none;
 }
 
-@media (max-width: 767px) {
-    .qa-doctor-card {
-        width: calc(50% - 10px);
-        margin: 0 5px 10px;
-    }
-}
-/* 
-@media (max-width: 600px) {
-    .qa-doctor-card {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-} */
-
 .qa-doctor-avatar img {
     margin: 10px auto;
     width: 100px;
@@ -339,7 +315,6 @@
 /* Question list */
 .qa-list{
     margin:0;
-    background-color: #f5f5f5;
     border-radius: 15px;
     padding: 15px;
 }
@@ -468,31 +443,6 @@
     text-align: left;
 }
 
-@media (max-width: 768px) {
-    .qa-doctor-details-card {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .qa-doctor-details-card img {
-        width: 100%;
-        max-width: 220px;
-        height: auto;
-        margin-bottom: 12px;
-    }
-
-    .qa-doctor-details-info {
-        width: 100%;
-    }
-}
-
-@media (max-width: 480px) {
-    .qa-doctor-details-info h2 {
-        width: 100%;
-    }
-}
-
 .qa-breadcrumb {
     font-size: 14px;
     margin-bottom: 1rem;
@@ -564,6 +514,7 @@
     margin-bottom: -2px;
     margin-right: 5px;
     transition: all 0.25s linear;
+    font-size: 14px;
 }
 
 .question-icon-wrapper .eye-icon {
@@ -574,6 +525,59 @@
     background-image: url(../assets/images/icon-comment.svg);
 }
 
-.qa-lists{
-    padding: 20px;
+.qa-main-form .qa-lists .qa-list {
+    padding: 0;
 }
+
+.qa-main-form .qa-lists .qa-list .qa-item {
+    box-shadow: 0 0 10px rgb(0 0 0 / .21);
+    background-color: #fff;
+    margin: 3px;
+    padding: 20px 30px;
+    border-radius: 20px;
+}
+
+.qa-main-form .qa-lists .qa-list h3 {
+    margin-top: 0px;
+}
+
+@media (max-width: 992px) {
+    .qa-sidebar-left,
+    .qa-sidebar-right,
+    .qa-main-form {
+        flex: 0 0 100%;
+        order: unset;
+    }
+}
+
+@media (max-width: 767px) {
+    .qa-doctor-card {
+        width: calc(50% - 10px);
+        margin: 0 5px 10px;
+    }
+}
+@media (max-width: 768px) {
+    .qa-doctor-details-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .qa-doctor-details-card img {
+        width: 100%;
+        max-width: 220px;
+        height: auto;
+        margin-bottom: 12px;
+    }
+
+    .qa-doctor-details-info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .qa-doctor-details-info h2 {
+        width: 100%;
+    }
+}
+

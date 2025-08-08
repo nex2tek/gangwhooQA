@@ -50,11 +50,11 @@ $query = new WP_Query([
                             </div>
                             <div class="description"><?php the_excerpt(); ?></div>
                             <div class="question-icon-wrapper">
-                                <span class="question-icon eye-icon"></span>
+                                <span class="question-icon"><i class="bi bi-eye"></i></span>
                                 <span><?php echo number_format((int) get_post_meta(get_the_ID(), 'view_count', true)); ?> <?php nex2tek_echo('lượt xem', 'nex2tek-qa'); ?></span>
                             </div>
                              <div class="question-icon-wrapper">
-                                <span class="question-icon comment-icon"></span>
+                                <span class="question-icon"><i class="bi bi-chat-dots"></i></span>
                                 <span><span><?= get_comments_number() ?> <?php nex2tek_echo('bình luận','nex2tek-qa'); ?></span></span>
                             </div>
                         </div>
@@ -81,6 +81,7 @@ $query = new WP_Query([
 
         <!-- Sidebar thống kê -->
         <div class="qa-col qa-sidebar-right">
+            <?php echo do_shortcode('[nex2tek_qa_button_create_question]'); ?>
             <?php echo do_shortcode('[nex2tek_qa_question_view]'); ?>
             <?php echo do_shortcode('[nex2tek_qa_question_comment]'); ?>
         </div>
