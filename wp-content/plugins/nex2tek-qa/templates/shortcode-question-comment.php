@@ -1,34 +1,40 @@
 <?php
 
-global $wpdb;
-$current_lang = get_current_lang();
+    global $wpdb;
+    $current_lang = get_current_lang();
 
-$post_ids = $wpdb->get_col("
-    SELECT ID FROM {$wpdb->posts}
-    WHERE post_type = 'question'
-    AND post_status = 'publish'
-    AND comment_count > 0
-    ORDER BY comment_count DESC
-    LIMIT 5
-");
+    $post_ids = $wpdb->get_col("
+        SELECT ID FROM {$wpdb->posts}
+        WHERE post_type = 'question'
+        AND post_status = 'publish'
+        AND comment_count > 0
+        ORDER BY comment_count DESC
+        LIMIT 5
+    ");
 
-if (empty($post_ids)) return '';
+    if (empty($post_ids)) return '';
 
-$most_commented_questions = new WP_Query([
-    'post_type' => 'question',
-    'post__in' => $post_ids,
-    'orderby' => 'post__in',
-    'posts_per_page' => 5,
-    'tax_query'      => [
-        [
-            'taxonomy' => 'language',
-            'field'    => 'slug',
-            'terms'    => $current_lang,
-        ],
-    ],
-]);
+    $args = [
+        'post_type' => 'question',
+        'post__in' => $post_ids,
+        'orderby' => 'post__in',
+        'posts_per_page' => 5,
+    ];
 
-if ($most_commented_questions->have_posts()):
+    // Only add tax_query if the 'language' taxonomy exists and current_lang is set
+    if (taxonomy_exists('language') && !empty($current_lang)) {
+        $args['tax_query'] = [
+            [
+                'taxonomy' => 'language',
+                'field'    => 'slug',
+                'terms'    => $current_lang,
+            ],
+        ];
+    }
+
+    $most_commented_questions = new WP_Query($args);
+
+    if ($most_commented_questions->have_posts()):
 ?>
 <div class="qa-most-viewed">
     <h5><?php nex2tek_echo('Câu hỏi nhiều bình luận nhất', 'nex2tek-qa'); ?></h5>

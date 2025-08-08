@@ -1,21 +1,28 @@
 <?php
     $current_lang = get_current_lang();
 
-    $top_viewed_questions = new WP_Query([
+    // Base args
+    $args = [
         'post_type'      => 'question',
         'posts_per_page' => 5,
         'post_status'    => 'publish',
         'meta_key'       => 'view_count',
         'orderby'        => 'meta_value_num',
         'order'          => 'DESC',
-        'tax_query'      => [
+    ];
+
+    // Only add tax_query if the 'language' taxonomy exists and current_lang is set
+    if (taxonomy_exists('language') && !empty($current_lang)) {
+        $args['tax_query'] = [
             [
                 'taxonomy' => 'language',
                 'field'    => 'slug',
                 'terms'    => $current_lang,
             ],
-        ],
-    ]);
+        ];
+    }
+
+    $top_viewed_questions = new WP_Query($args);
 
     if ($top_viewed_questions->have_posts()):
 ?>

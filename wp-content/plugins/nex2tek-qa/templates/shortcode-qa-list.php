@@ -6,19 +6,25 @@ $current_lang = get_current_lang();
 
 $paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
 
-$query = new WP_Query([
+$args = [
     'post_type'      => 'question',
     'post_status'    => 'publish',
     'posts_per_page' => 12,
     'paged'          => $paged,
-    'tax_query'      => [
+];
+
+// Only add tax_query if the 'language' taxonomy exists and current_lang is set
+if (taxonomy_exists('language') && !empty($current_lang)) {
+    $args['tax_query'] = [
         [
             'taxonomy' => 'language',
             'field'    => 'slug',
             'terms'    => $current_lang,
         ],
-    ],
-]);
+    ];
+}
+
+$query = new WP_Query($args);
 ?>
 
 <div class="qa-container">
