@@ -45,5 +45,6 @@ add_action('init', function () {
         pll_register_string('nex2tek_qa_create_question','Gửi câu hỏi', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_question_list','Hỏi đáp', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_home','Trang chủ', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_question_asked','Đã hỏi', 'Nex2tek QA');
     }
 });
