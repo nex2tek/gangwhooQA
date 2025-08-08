@@ -1,4 +1,5 @@
 <?php
+
 // apply polylang support
 add_filter('pll_get_post_types', function ($post_types, $is_translatable) {
     $post_types['question'] = 'question';
@@ -132,36 +133,30 @@ function nex2tek_breadcrumb() {
     if (!get_option('nex2tek_qa_enable_breadcrumb', 1)) {
         return;
     }
-    
     // Home link
     $home_url   = esc_url(home_url('/'));
     $home_label = esc_html(nex2tek_text('Trang chủ', 'nex2tek-qa'));
-
-    // Q&A link
-    $qa_page_id = get_translated_page_id_by_slug('hoi-dap');
-    $qa_url     = $qa_page_id ? esc_url(get_permalink($qa_page_id)) : '#';
+    $qa = new Nex2Tek_QA();
+    // Q&A link page
+    $qa_page_id = $qa->get_translated_page_id_by_slug('hoi-dap');
+  
+    $qa_url     = $qa_page_id ? get_permalink((int) $qa_page_id) : '#';
     $qa_label   = esc_html(nex2tek_text('Hỏi đáp', 'nex2tek-qa'));
 
     echo '<div class="qa-breadcrumb">';
     echo '<a href="' . $home_url . '">' . $home_label . '</a> &nbsp;&gt;&nbsp; ';
 
-    // Add Q&A link to breadcrumb if not currently on the Q&A page
+    // Q&A link
     if (!is_page($qa_page_id)) {
-        echo '<a href="' . $qa_url . '">' . $qa_label . '</a> &nbsp;&gt;&nbsp; ';
+        echo '<a href="' . esc_url($qa_url) . '">' . $qa_label . '</a> &nbsp;&gt;&nbsp; ';
     }
 
     // Last breadcrumb
     if ((is_category() || is_tax()) && !is_page($qa_page_id)) {
-        echo '<span>' . esc_html(single_tag_title('', false)) . '</span>';
+        echo '<span>' . esc_html(single_term_title('', false)) . '</span>';
     } else {
         echo '<span>' . esc_html(get_the_title()) . '</span>';
     }
 
     echo '</div>';
-}
-
-function get_translated_page_id_by_slug($slug) {
-    $page = get_page_by_path($slug);
-    if (!$page) return false;
-    return function_exists('pll_get_post') ? pll_get_post($page->ID) : $page->ID;
 }

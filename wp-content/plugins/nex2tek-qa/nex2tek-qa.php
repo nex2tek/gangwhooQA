@@ -207,10 +207,19 @@ class Nex2Tek_QA {
         }
         return ob_get_clean();
     }
-    private function get_translated_page_id_by_slug($slug) {
-        $page = get_page_by_path($slug);
+    public function get_translated_page_id_by_slug($slug) {
+        if (empty($slug)) return false;
+        // get only page
+        $page = get_page_by_path($slug, OBJECT, 'page');
         if (!$page) return false;
-        return function_exists('pll_get_post') ? pll_get_post($page->ID) : $page->ID;
+
+        // if polylang
+        if (function_exists('pll_get_post')) {
+            $translated_id = pll_get_post($page->ID);
+            return $translated_id ?: false;
+        }
+
+        return $page->ID;
     }
 
     public function override_templates($template) {
@@ -273,8 +282,9 @@ register_activation_hook(__FILE__, 'nex2tek_qa_create_pages');
 function nex2tek_qa_create_pages() {
     $default_lang = function_exists('pll_default_language') ? pll_default_language() : 'vi';
 
+    // create page Gửi câu hỏi
     if (!get_page_by_path('gui-cau-hoi')) {
-        $post_id = wp_insert_post([
+        $page_id = wp_insert_post([
             'post_title'   => 'Gửi câu hỏi',
             'post_name'    => 'gui-cau-hoi',
             'post_content' => '[nex2tek_qa_form]',
@@ -283,12 +293,16 @@ function nex2tek_qa_create_pages() {
         ]);
 
         if (function_exists('pll_set_post_language')) {
-            pll_set_post_language($post_id, $default_lang);
+            pll_set_post_language($page_id, $default_lang);
+            pll_save_post_translations([
+                $default_lang => $page_id
+            ]);
         }
     }
-    
+
+    // create page Hỏi Đáp
     if (!get_page_by_path('hoi-dap')) {
-        $post_id = wp_insert_post([
+        $page_id = wp_insert_post([
             'post_title'   => 'Hỏi Đáp',
             'post_name'    => 'hoi-dap',
             'post_content' => '[nex2tek_qa_list]',
@@ -297,10 +311,14 @@ function nex2tek_qa_create_pages() {
         ]);
 
         if (function_exists('pll_set_post_language')) {
-            pll_set_post_language($post_id, $default_lang);
+            pll_set_post_language($page_id, $default_lang);
+            pll_save_post_translations([
+                $default_lang => $page_id
+            ]);
         }
     }
 }
+
 
 include_once plugin_dir_path(__FILE__) . 'nex2tek-functions.php';
 include_once plugin_dir_path(__FILE__) . 'nex2tek-translate.php';
