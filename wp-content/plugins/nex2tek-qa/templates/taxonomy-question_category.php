@@ -3,20 +3,32 @@
 $paged = max(1, get_query_var('paged'));
 
 $term = get_queried_object();
+$current_lang = get_current_lang();
+
+$tax_query = [
+    [
+        'taxonomy' => 'question_category',
+        'field'    => 'slug',
+        'terms'    => $term->slug,
+    ],
+];
+
+if (taxonomy_exists('language') && !empty($current_lang)) {
+    $tax_query[] = [
+        'taxonomy' => 'language',
+        'field'    => 'slug',
+        'terms'    => $current_lang,
+    ];
+}
 
 $query = new WP_Query([
     'post_type'      => 'question',
-    'tax_query'      => [
-        [
-            'taxonomy' => 'question_category',
-            'field'    => 'slug',
-            'terms'    => $term->slug,
-        ],
-    ],
+    'tax_query'      =>  $tax_query,
     'post_status'    => 'publish',
     'posts_per_page' => 12,
     'paged'          => $paged,
 ]);
+
 ?>
 
 <div class="qa-container">
