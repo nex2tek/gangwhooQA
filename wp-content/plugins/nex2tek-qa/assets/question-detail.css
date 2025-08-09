@@ -496,3 +496,20 @@
 .answer_knhd_1_0_0__date span {
   color: var(--qa-primary);
 }
+
+.answer_knhd_1_0_0__meta.no-doctor {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.answer_knhd_1_0_0__meta.no-doctor .answer_knhd_1_0_0__date {
+  text-align: right;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .answer_knhd_1_0_0__date {
+    text-align: right;
+    width: 100%;
+  }
+}
