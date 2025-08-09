@@ -2,7 +2,7 @@
 /*
 Plugin Name: Q&A Plugin
 Description: Plugin hỏi đáp bác sĩ cho WordPress. Hỗ trợ dịch với Polylang.
-Version: 1.0.1
+Version: 1.0.3
 Author: Nex2Tek
 Author URI: https://nex2tek.com
 Text Domain: nex2tek-qa
@@ -272,13 +272,15 @@ class Nex2Tek_QA {
     }
 
     public function enqueue_assets() {
+        $plugin_data = get_file_data(__FILE__, ['Version' => 'Version'], 'plugin');
+        $plugin_version = $plugin_data['Version'];
         // Styles
-        wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], '1.0.2');
-        wp_enqueue_style('nex2tek-question-detail-style', plugin_dir_url(__FILE__) . 'assets/question-detail.css', [], '1.0.2');
+        wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], $$plugin_version);
+        wp_enqueue_style('nex2tek-question-detail-style', plugin_dir_url(__FILE__) . 'assets/question-detail.css', [], $plugin_version);
         wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css', [], '1.10.3');
 
         // Scripts
-        wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], '1.0.2', true);
+        wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], $plugin_version, true);
     }
 
     public function add_settings_link($links) {

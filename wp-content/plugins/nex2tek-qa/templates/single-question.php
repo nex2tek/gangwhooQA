@@ -26,7 +26,14 @@ $answer = get_post_meta(get_the_ID(), '_answer', true);
                             </div>
                             <div class="question_knhd_1_0_1__date"><?php nex2tek_echo('Đã hỏi','nex2tek-qa'); ?>: <span><?= $createdDate ?></span></div>
                         </div>
-                        <h2 class="question_knhd_1_0_1__content"><?php the_content(); ?></h2>
+                        <div class="question_knhd_1_0_1__content">
+                            <div class="qa-question_doctor">
+                                <div class="qa-question_doctor__title">
+                                    
+                                </div>
+                            </div>
+                            <?php the_content(); ?>
+                        </div>
                         <div class="question_knhd_1_0_1__action">
                             <div>
                                 <a href="#comment-section" class="question_knhd_1_0_1__comment">

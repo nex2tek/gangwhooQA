@@ -17,10 +17,14 @@
                 <h2><?php the_title(); ?></h2>
 
                 <div class="qa-doctor-details-desc">
-                    <?php the_content(); ?>
+                    <?php the_excerpt(); ?>
                 </div>
             </div>
+           
         </div>
+         <div class="qa-doctor-details-content">
+                <?php the_content(); ?>
+            </div>
     </div>
 </div>
 
