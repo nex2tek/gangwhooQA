@@ -540,7 +540,64 @@
 .qa-main-form .qa-lists .qa-list h3 {
     margin-top: 0px;
 }
+.qa-search{
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+}
+.qa-search .qa-search-title{
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--qa-primary);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+.qa-search .qa-search-sub{
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+.qa-search .search-form{
+    position: relative;
+}
 
+.qa-search #qa-search-form{
+    width: 100%;
+}
+#qa-search-form .input-group{
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+}
+.qa-search #qa-search-form input{
+    width: calc(100% - 60px);
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;    
+}
+
+.qa-search #qa-search-form button{
+    padding: 12px 15px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid var(--qa-primary);
+    border-radius: 4px;
+    background-color: var(--qa-primary);
+    font-size: 16px;
+    cursor: pointer;
+    color:white;    
+}
+.qa-search-result span{
+    color: var(--qa-primary);
+    font-weight: 600;
+    font-size: 40px;
+}
 @media (max-width: 992px) {
     .qa-sidebar-left,
     .qa-sidebar-right,

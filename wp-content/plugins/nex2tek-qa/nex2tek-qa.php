@@ -2,7 +2,7 @@
 /*
 Plugin Name: Q&A Plugin
 Description: Plugin hỏi đáp bác sĩ cho WordPress. Hỗ trợ dịch với Polylang.
-Version: 1.0.0
+Version: 1.0.1
 Author: Nex2Tek
 Author URI: https://nex2tek.com
 Text Domain: nex2tek-qa
@@ -24,6 +24,7 @@ class Nex2Tek_QA {
         add_shortcode('nex2tek_qa_question_comment', array($this, 'qa_question_comment_shortcode'));
         add_shortcode('nex2tek_qa_doctor_list', array($this, 'qa_doctor_list_shortcode'));
         add_shortcode('nex2tek_qa_button_create_question', array($this, 'qa_button_create_question_shortcode'));
+        add_shortcode('nex2tek_qa_search', array($this, 'qa_search_shortcode'));
         add_action('add_meta_boxes', array($this, 'add_doctor_title_meta_box'));
         add_action('save_post_doctor', array($this, 'save_doctor_meta'));
         add_action('pre_get_posts', array($this, 'custom_post_query_question_category'));
@@ -208,6 +209,16 @@ class Nex2Tek_QA {
         }
         return ob_get_clean();
     }
+
+    public function qa_search_shortcode(){
+        ob_start();
+        $template_file = plugin_dir_path(__FILE__) . 'templates/shortcode-search.php';
+        if (file_exists($template_file)) {
+            include $template_file;
+        }
+        return ob_get_clean();
+    }
+
     public function get_translated_page_id_by_slug($slug) {
         if (empty($slug)) return false;
         // get only page
@@ -262,12 +273,12 @@ class Nex2Tek_QA {
 
     public function enqueue_assets() {
         // Styles
-        wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], '1.0.1');
-        wp_enqueue_style('nex2tek-question-detail-style', plugin_dir_url(__FILE__) . 'assets/question-detail.css', [], '1.0.1');
+        wp_enqueue_style('nex2tek-qa-style', plugin_dir_url(__FILE__) . 'assets/style.css', [], '1.0.2');
+        wp_enqueue_style('nex2tek-question-detail-style', plugin_dir_url(__FILE__) . 'assets/question-detail.css', [], '1.0.2');
         wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css', [], '1.10.3');
 
         // Scripts
-        wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], '1.0.1', true);
+        wp_enqueue_script('nex2tek-qa-script', plugin_dir_url(__FILE__) . 'assets/script.js', ['jquery'], '1.0.2', true);
     }
 
     public function add_settings_link($links) {

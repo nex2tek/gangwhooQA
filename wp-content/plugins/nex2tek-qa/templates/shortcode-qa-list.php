@@ -1,29 +1,7 @@
 <?php
 
 if (!defined('ABSPATH')) exit;
-
-$current_lang = get_current_lang();
-$paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
-
-$args = [
-    'post_type'      => 'question',
-    'post_status'    => 'publish',
-    'posts_per_page' => 12,
-    'paged'          => $paged,
-];
-
-// Only add tax_query if the 'language' taxonomy exists and current_lang is set
-if (taxonomy_exists('language') && !empty($current_lang)) {
-    $args['tax_query'] = [
-        [
-            'taxonomy' => 'language',
-            'field'    => 'slug',
-            'terms'    => $current_lang,
-        ],
-    ];
-}
-
-$query = new WP_Query($args);
+$query = nex2tek_get_questions();
 ?>
 
 <div class="qa-container">
@@ -36,6 +14,7 @@ $query = new WP_Query($args);
 
         <!-- Form Question -->
         <div class="qa-col qa-main-form">
+            <?php echo do_shortcode('[nex2tek_qa_search]'); ?>
             <?php echo do_shortcode('[nex2tek_qa_doctor_list]'); ?>
             <div class="qa-form-wrapper qa-lists">
                <?php if ($query->have_posts()) : ?>

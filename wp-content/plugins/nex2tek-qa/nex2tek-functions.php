@@ -129,6 +129,34 @@ function nex2tek_qa_enable_breadcrumb_field_render() {
     echo '<input type="checkbox" name="nex2tek_qa_enable_breadcrumb" value="1" ' . checked(1, $value, false) . ' />';
 }
 
+function nex2tek_get_questions(array $extra_args = []) {
+    $current_lang = get_current_lang();
+    $paged = max(1, get_query_var('paged') ?: get_query_var('page') ?: 1);
+
+    $args = [
+        'post_type'      => 'question',
+        'post_status'    => 'publish',
+        'posts_per_page' => 12,
+        'paged'          => $paged,
+    ];
+
+    if (!empty($_GET['qa-search'])) {
+        $args['s'] = sanitize_text_field($_GET['qa-search']);
+    }
+
+    if (taxonomy_exists('language') && !empty($current_lang)) {
+        $args['tax_query'][] = [
+            'taxonomy' => 'language',
+            'field'    => 'slug',
+            'terms'    => $current_lang,
+        ];
+    }
+
+    // Merge thêm args ngoài nếu có
+    $args = array_merge($args, $extra_args);
+
+    return new WP_Query($args);
+}
 
 /**
  * verify captcha
