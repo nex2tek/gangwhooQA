@@ -405,19 +405,22 @@
     background-color: #f8d7da;
     color: red;
 }
-
 /* Doctor details */
 .qa-doctor-details-card {
     display: flex;
     gap: 2rem;
     background: #f4f4f4;
-    padding: 2rem;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+.qa-doctor-details-image{
+    width: 300px;
 }
 .qa-doctor-details-image img {
-    width: 250px;
-    height: auto;
-    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
 }
 .qa-doctor-title {
     text-transform: uppercase;
@@ -452,6 +455,14 @@
 .qa-breadcrumb a {
     color: #333;
     text-decoration: none;
+}
+.qa-breadcrumb span{
+    font-weight: bold;
+}
+.qa-doctor-details-content{
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    padding: 20px;
+    font-size: 16px;
 }
 
 /* Start for send question button */
@@ -571,6 +582,7 @@
     width: 100%;
     gap: 10px;
 }
+
 .qa-search #qa-search-form input{
     width: calc(100% - 60px);
     padding: 12px 20px;
@@ -579,7 +591,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
-    font-size: 16px;    
+    font-size: 16px;  
+    height: 44.5px;  
 }
 
 .qa-search #qa-search-form button{
@@ -591,13 +604,16 @@
     background-color: var(--qa-primary);
     font-size: 16px;
     cursor: pointer;
-    color:white;    
+    color:white;
+    height: 44.5px;    
 }
 .qa-search-result span{
     color: var(--qa-primary);
     font-weight: 600;
     font-size: 40px;
 }
+
+
 @media (max-width: 992px) {
     .qa-sidebar-left,
     .qa-sidebar-right,
@@ -608,6 +624,10 @@
 }
 
 @media (max-width: 767px) {
+    .qa-doctor-details-image {
+        width: 100%;
+        height: 450px;
+    }
     .qa-doctor-card {
         width: calc(50% - 10px);
         margin: 0 5px 10px;
@@ -618,13 +638,6 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-    }
-
-    .qa-doctor-details-card img {
-        width: 100%;
-        max-width: 220px;
-        height: auto;
-        margin-bottom: 12px;
     }
 
     .qa-doctor-details-info {
