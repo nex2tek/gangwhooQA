@@ -239,32 +239,32 @@
   width: 100%;
 }
 
-.qa-single .comment-form-comment{
+.qa-single .comment-form-comment {
   display: flex;
   flex-direction: column;
 }
 
-.qa-single #commentform .submit{
+.qa-single #commentform .submit {
   background-color: var(--qa-primary);
   border-color: var(--qa-primary);
   color: #fff;
   border-radius: 10px;
 }
-.qa-single #commentform .submit:hover{
-  opacity: .8;
+.qa-single #commentform .submit:hover {
+  opacity: 0.8;
 }
 /* Start style for comment form */
-.qa-single .comment-form-author{
+.qa-single .comment-form-author {
   display: flex;
   flex-direction: column;
 }
 
-.qa-single .comment-form-email{
+.qa-single .comment-form-email {
   display: flex;
   flex-direction: column;
 }
 
-.qa-single .comment-form-url{
+.qa-single .comment-form-url {
   display: flex;
   flex-direction: column;
 }
@@ -294,7 +294,7 @@
 .qa-single #commentform .comment-form-url input:focus {
   border-color: #80bdff;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .qa-single #commentform .comment-form label {
@@ -442,3 +442,57 @@
   margin-left: 10px;
 }
 /* End for comment list */
+.answer_knhd_1_0_0__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.answer_knhd_1_0_0__info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  text-decoration: none;
+}
+
+.answer_knhd_1_0_0__avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.answer_knhd_1_0_0__avatar img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.answer_knhd_1_0_0__name {
+  color: var(--qa-primary);
+  font-weight: 500;
+  margin-right: 10px;
+  font-size: 21px;
+  flex: 1;
+}
+
+.answer_knhd_1_0_0__name span {
+  display: block;
+  font-size: 13px;
+  color: #000;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.answer_knhd_1_0_0__date {
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 5px;
+}
+
+.answer_knhd_1_0_0__date span {
+  color: var(--qa-primary);
+}
