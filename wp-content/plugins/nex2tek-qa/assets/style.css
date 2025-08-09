@@ -408,7 +408,6 @@
 /* Doctor details */
 .qa-doctor-details-card {
     display: flex;
-    gap: 2rem;
     background: #f4f4f4;
     border-radius: 8px 8px 0 0;
     overflow: hidden;
@@ -416,6 +415,7 @@
 .qa-doctor-details-image{
     width: 300px;
 }
+
 .qa-doctor-details-image img {
     width: 100%;
     height: 100%;
@@ -425,6 +425,10 @@
 .qa-doctor-title {
     text-transform: uppercase;
     font-size: 15px;
+}
+
+.qa-doctor-details-info{
+    padding: 20px 30px;
 }
 .qa-doctor-details-info h2 {
     margin: 0.5rem 0;
@@ -626,7 +630,6 @@
 @media (max-width: 767px) {
     .qa-doctor-details-image {
         width: 100%;
-        height: 450px;
     }
     .qa-doctor-card {
         width: calc(50% - 10px);
@@ -636,12 +639,12 @@
 @media (max-width: 768px) {
     .qa-doctor-details-card {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
     }
-
     .qa-doctor-details-info {
-        width: 100%;
+        width: auto;
+    }
+    .qa-doctor-details-info{
+        padding: 20px;
     }
 }
 
