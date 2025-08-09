@@ -62,8 +62,8 @@
     font-size: 26px;
 }
 
-.qa-form textarea,
-.qa-form input {
+.qa-form .qa-textarea,
+.qa-form .qa-input {
     width: 100%;
     padding: 8px 10px;
     outline: none;
@@ -71,10 +71,10 @@
     border: none;
     border-radius: 10px;
     margin-bottom: 15px;
-    box-sizing: border-box; /* ✅ thêm dòng này */
+    box-sizing: border-box;
 }
 
-.qa-form input {
+.qa-form .qa-input {
     height: 40px;
 }
 
@@ -82,7 +82,7 @@
     text-align: center;
 }
 
-.qa-form button {
+.qa-form .qa-submit {
     background: #ff6105;
     color: #fff;
     border: none;
@@ -93,7 +93,7 @@
     cursor: pointer;
 }
 
-.qa-form button:hover {
+.qa-form .qa-submit:hover {
     background: #ff8161;
 }
 

@@ -45,7 +45,7 @@ $query = new WP_Query([
                             
                             <div>
                                 <div class="text-primary d-flex align-items-center">    
-                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"><?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: nex2tek_echo('Người ản danh', 'nex2tek-qa') ; ?>
+                                    <img class="qa-avatar" src="<?php echo plugins_url('assets/images/avatar.png', __DIR__); ?>" width="30" height="30"><?php echo get_post_meta(get_the_ID(), 'qa_name', true) ?: nex2tek_echo('Người ẩn danh', 'nex2tek-qa') ; ?>
                                 </div>
                             </div>
                             <div class="description"><?php the_excerpt(); ?></div>

@@ -1,6 +1,6 @@
 <?php get_header();
 increase_question_view_count(get_the_ID());
-$userName = get_post_meta(get_the_ID(), 'qa_name', true) ?: 'Người ẩn danh';
+$userName = get_post_meta(get_the_ID(), 'qa_name', true) ?: nex2tek_text('Người ẩn danh', 'nex2tek-qa');
 $viewCount = number_format((int) get_post_meta(get_the_ID(), 'view_count', true));
 $createdDate = get_the_date('d/m/Y', get_the_ID());
 $answer = get_post_meta(get_the_ID(), '_answer', true);

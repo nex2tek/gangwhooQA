@@ -53,17 +53,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['qa_question'])) {
 
                 <form method="post" class="qa-form">
                     <?php wp_nonce_field('qa_submit_form', 'qa_nonce'); ?>
-                    <input type="text" name="qa_title" id="qa_title" placeholder="<?php nex2tek_echo('Tiêu đề câu hỏi', 'nex2tek-qa'); ?>*" required>
-                    <textarea name="qa_question" id="qa_question" rows="4" required placeholder="<?php nex2tek_echo('Nội dung câu hỏi', 'nex2tek-qa'); ?>"></textarea>
-                    <input type="text" name="qa_name" id="qa_name" placeholder="<?php nex2tek_echo('Tên của bạn', 'nex2tek-qa'); ?>*" required>
-                    <input type="tel" name="qa_phone" id="qa_phone" placeholder="<?php nex2tek_echo('Số điện thoại', 'nex2tek-qa'); ?>*" required>
-                    <input type="email" name="qa_email" id="qa_email" placeholder="<?php nex2tek_echo('Email', 'nex2tek-qa'); ?>*" required>
+                    <input type="text" class="qa-input" name="qa_title" id="qa_title" placeholder="<?php nex2tek_echo('Tiêu đề câu hỏi', 'nex2tek-qa'); ?>*" required>
+                    <textarea class="qa-textarea" name="qa_question" id="qa_question" rows="4" required placeholder="<?php nex2tek_echo('Nội dung câu hỏi', 'nex2tek-qa'); ?>"></textarea>
+                    <input type="text" class="qa-input" name="qa_name" id="qa_name" placeholder="<?php nex2tek_echo('Tên của bạn', 'nex2tek-qa'); ?>*" required>
+                    <input type="tel" class="qa-input" name="qa_phone" id="qa_phone" placeholder="<?php nex2tek_echo('Số điện thoại', 'nex2tek-qa'); ?>*" required>
+                    <input type="email" class="qa-input" name="qa_email" id="qa_email" placeholder="<?php nex2tek_echo('Email', 'nex2tek-qa'); ?>">
                     <?php if ($is_enabled_captcha): ?>
                         <div class="cf-turnstile" data-sitekey="<?php echo get_option('nex2tek_qa_sitekey', ''); ?>"></div>
                         <br>
                     <?php endif; ?>                    
                     <div class="text-center">
-                        <button type="submit"><?php nex2tek_echo('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></button>
+                        <button type="submit" class="qa-submit"><?php nex2tek_echo('ĐẶT CÂU HỎI', 'nex2tek-qa'); ?></button>
                     </div>
                 </form>
             </div>
