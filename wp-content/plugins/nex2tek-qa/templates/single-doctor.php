@@ -17,7 +17,7 @@
                 <h2><?php the_title(); ?></h2>
 
                 <div class="qa-doctor-details-desc">
-                    <?php the_excerpt(); ?>
+                <?php echo wpautop(esc_html(get_post_meta(get_the_ID(), 'doctor_info', true))); ?>
                 </div>
             </div>
            

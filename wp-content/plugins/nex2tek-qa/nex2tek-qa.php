@@ -29,6 +29,7 @@ class Nex2Tek_QA {
         add_action('save_post_doctor', array($this, 'save_doctor_meta'));
         add_action('pre_get_posts', array($this, 'custom_post_query_question_category'));
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), [$this, 'add_settings_link']);
+        add_action('add_meta_boxes', array($this, 'add_doctor_info_meta_box'));
     }
 
     public function register_post_types() {
@@ -103,6 +104,20 @@ class Nex2Tek_QA {
         );
     }
 
+    public function add_doctor_info_meta_box() {
+        add_meta_box(
+            'doctor_info_meta',
+            'Thông tin bác sĩ',
+            function($post) {
+                $value = get_post_meta($post->ID, 'doctor_info', true);
+                echo '<textarea name="doctor_info" class="widefat" rows="5">' . esc_textarea($value) . '</textarea>';
+            },
+            'doctor',
+            'normal',
+            'default'
+        );
+    }    
+
     public function render_question_meta_box($post) {
         $doctors = get_posts(['post_type' => 'doctor', 'posts_per_page' => -1]);
         $selected_doctor = get_post_meta($post->ID, '_select_doctor', true);
@@ -139,6 +154,10 @@ class Nex2Tek_QA {
     public function save_doctor_meta($post_id) {
         if (array_key_exists('doctor_title', $_POST)) {
             update_post_meta($post_id, 'doctor_title', sanitize_text_field($_POST['doctor_title']));
+        }
+
+        if (array_key_exists('doctor_info', $_POST)) {
+            update_post_meta($post_id, 'doctor_info', sanitize_textarea_field($_POST['doctor_info']));
         }
     }
 
@@ -237,7 +256,7 @@ class Nex2Tek_QA {
     public function override_templates($template) {
         // question detail UI
 
-         $is_page_question      = $this->get_translated_page_id_by_slug('hoi-dap');
+         $is_page_question      = $this->get_translated_page_id_by_slug('hoi-dap-tham-my');
          $is_page_question_form  = $this->get_translated_page_id_by_slug('gui-cau-hoi');
         if (is_singular('question')) {
            
@@ -316,10 +335,10 @@ function nex2tek_qa_create_pages() {
     }
 
     // create page Hỏi Đáp
-    if (!get_page_by_path('hoi-dap')) {
+    if (!get_page_by_path('hoi-dap-tham-my')) {
         $page_id = wp_insert_post([
-            'post_title'   => 'Hỏi Đáp',
-            'post_name'    => 'hoi-dap',
+            'post_title'   => 'Hỏi đáp thẩm mỹ',
+            'post_name'    => 'hoi-dap-tham-my',
             'post_content' => '[nex2tek_qa_list]',
             'post_status'  => 'publish',
             'post_type'    => 'page',

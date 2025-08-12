@@ -218,10 +218,10 @@ function nex2tek_breadcrumb() {
     $home_label = esc_html(nex2tek_text('Trang chủ', 'nex2tek-qa'));
     $qa = new Nex2Tek_QA();
     // Q&A link page
-    $qa_page_id = $qa->get_translated_page_id_by_slug('hoi-dap');
+    $qa_page_id = $qa->get_translated_page_id_by_slug('hoi-dap-tham-my');
   
     $qa_url     = $qa_page_id ? get_permalink((int) $qa_page_id) : '#';
-    $qa_label   = esc_html(nex2tek_text('Hỏi đáp', 'nex2tek-qa'));
+    $qa_label   = esc_html(nex2tek_text('Hỏi đáp thẩm mỹ', 'nex2tek-qa'));
 
     echo '<div class="qa-breadcrumb">';
     echo '<a href="' . $home_url . '">' . $home_label . '</a> &nbsp;&gt;&nbsp; ';
@@ -234,6 +234,16 @@ function nex2tek_breadcrumb() {
     // Last breadcrumb
     if ((is_category() || is_tax()) && !is_page($qa_page_id)) {
         echo '<span>' . esc_html(single_term_title('', false)) . '</span>';
+
+    } elseif (is_singular('question')) {
+        // Question category
+        $terms = get_the_terms(get_the_ID(), 'question_category');
+        if (!empty($terms) && !is_wp_error($terms)) {
+            $term = array_shift($terms); // Get the first term
+            echo '<a href="' . esc_url(get_term_link($term)) . '">' . esc_html($term->name) . '</a> &nbsp;&gt;&nbsp; ';
+        }
+        echo '<span>' . esc_html(get_the_title()) . '</span>';
+
     } else {
         echo '<span>' . esc_html(get_the_title()) . '</span>';
     }

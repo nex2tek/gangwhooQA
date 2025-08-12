@@ -13,7 +13,7 @@ $doctorAvatar = $doctor && has_post_thumbnail($doctorId) ? get_the_post_thumbnai
 $doctorTitle = $doctor ? get_post_meta($doctorId, 'doctor_title', true) : '';
 ?>
 
-<div class="qa-container container mt-4">
+<div class="qa-container">
     <?php nex2tek_breadcrumb(); ?>
     <div class="qa-row row">
         <div class="qa-col qa-sidebar-left">
@@ -72,6 +72,8 @@ $doctorTitle = $doctor ? get_post_meta($doctorId, 'doctor_title', true) : '';
                         <div class="answer_knhd_1_0_0__action helpful-buttons" data-post-id="18458" data-user-vote="">
                             <a href="#comment-section" class="answer_knhd_1_0_0__reply"><span class="answer_knhd_1_0_0__icon answer_knhd_1_0_0__icon--3"></span><?php nex2tek_echo('Trả lời', 'nex2tek-qa'); ?> </a>
                         </div>
+                        <br/>
+                        <?php echo do_shortcode('[nex2tek_qa_doctor_list]'); ?>
                     </article>
                 </section>
                 <div id="comment-section">

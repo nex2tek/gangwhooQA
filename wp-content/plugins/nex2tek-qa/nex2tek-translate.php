@@ -49,8 +49,11 @@ add_action('init', function () {
         pll_register_string('nex2tek_qa_question_title','Tiêu đề câu hỏi', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_search_sub_title','Nhận câu trả lời ngay lập tức', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_search_title','CÂU HỎI CỦA BẠN LÀ GÌ', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_search_page_title','Bạn Cần Giải Đáp Vấn Đề Thẩm Mỹ Nào', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_search_page_sub_title','Chúng tôi sẽ trả lời nhanh chóng', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_search_placeholder','Gõ câu hỏi', 'Nex2tek QA');
         pll_register_string('nex2tek_qa_search_result','kết quả tìm kiếm', 'Nex2tek QA');
+        pll_register_string('nex2tek_qa_question_answer','Hỏi đáp thẩm mỹ', 'Nex2tek QA');
         //more...
     }
 });

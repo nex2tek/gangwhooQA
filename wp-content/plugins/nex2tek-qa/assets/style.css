@@ -610,6 +610,7 @@
     cursor: pointer;
     color:white;
     height: 44.5px;    
+    line-height: normal!important;
 }
 .qa-search-result span{
     color: var(--qa-primary);
@@ -624,6 +625,9 @@
     .qa-main-form {
         flex: 0 0 100%;
         order: unset;
+    }
+    .qa-sidebar-left {
+        order: 3;
     }
 }
 
